@@ -1,6 +1,6 @@
 use Mix.Config
 
-config :islands_text_client,
+config :identicon,
   book_ref:
     """
     Based on the course [The Complete Elixir and Phoenix Bootcamp]
