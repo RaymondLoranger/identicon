@@ -37,7 +37,7 @@ defmodule Identicon.Image do
   defp build_grid(%Image{hex: hex} = image) do
     grid =
       hex
-      |> Enum.chunk(3)
+      |> Enum.chunk_every(3, 3, :discard)
       |> Enum.map(&mirror_row/1)
       |> List.flatten()
       |> Enum.with_index()

@@ -25,3 +25,4 @@ identicon-*.tar
 perso*
 tree*
 /log
+/.elixir_ls

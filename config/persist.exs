@@ -1,6 +1,6 @@
 use Mix.Config
 
-{sep, prog} =
+{separator, program} =
   case :os.type() do
     # File Explorer opens behind other windows...
     # {:win32, _} ->
@@ -13,7 +13,7 @@ use Mix.Config
       {"/", 'open'}
   end
 
-config :identicon, program: prog
-config :identicon, separator: sep
+config :identicon, program: program
+config :identicon, separator: separator
 
-config :identicon, target_folder: ".#{sep}assets#{sep}identicons"
+config :identicon, target_folder: ".#{separator}assets#{separator}identicons"
