@@ -1,6 +1,4 @@
 defmodule Identicon.Drawer do
-  @moduledoc false
-
   use PersistConfig
 
   alias Identicon.Image

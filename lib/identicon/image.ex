@@ -1,6 +1,4 @@
 defmodule Identicon.Image do
-  @moduledoc false
-
   alias __MODULE__
 
   @enforce_keys [:hex]

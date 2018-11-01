@@ -1,6 +1,4 @@
 defmodule Identicon.App do
-  @moduledoc false
-
   use Application
 
   alias __MODULE__

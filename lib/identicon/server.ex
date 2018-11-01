@@ -1,6 +1,4 @@
 defmodule Identicon.Server do
-  @moduledoc false
-
   use GenServer
 
   alias __MODULE__
