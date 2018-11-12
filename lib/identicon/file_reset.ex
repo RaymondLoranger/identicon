@@ -1,6 +1,4 @@
 defmodule Identicon.FileReset do
-  import IO.ANSI, only: [format: 1]
-
   @spec clear_log(Path.t()) :: :ok
   def clear_log(log_path) do
     log_path = Path.expand(log_path)
@@ -37,8 +35,11 @@ defmodule Identicon.FileReset do
 
   @spec error(File.posix(), String.t(), Path.t()) :: :ok
   defp error(reason, msg, path) do
-    [:light_red_background, :light_white, "#{msg}:"] |> format() |> IO.puts()
-    [:light_yellow, "#{inspect(path)}"] |> format() |> IO.puts()
-    [:light_yellow, "=> #{:file.format_error(reason)}"] |> format() |> IO.puts()
+    import IO.ANSI, only: [format: 1]
+    import IO, only: [puts: 1]
+
+    [:light_red_background, :light_white, "#{msg}:"] |> format() |> puts()
+    [:light_yellow, "#{inspect(path)}"] |> format() |> puts()
+    [:light_yellow, "=> #{:file.format_error(reason)}"] |> format() |> puts()
   end
 end
