@@ -5,6 +5,12 @@ defmodule Identicon.Drawer do
 
   @identicon_dir Application.get_env(@app, :identicon_dir)
   @identicon_pgm Application.get_env(@app, :identicon_pgm)
+  @square_size Application.get_env(@app, :square_size)
+  @squares_across Application.get_env(@app, :squares_across)
+  @squares_down Application.get_env(@app, :squares_down)
+
+  @image_width @square_size * @squares_across
+  @image_height @square_size * @squares_down
 
   @spec depict(String.t()) :: :ok | {:error, File.posix()}
   def depict(input) do
@@ -18,11 +24,11 @@ defmodule Identicon.Drawer do
 
   @spec draw_image(Image.t()) :: binary
   defp draw_image(%Image{color: color, squares: squares}) do
-    image = :egd.create(250, 250)
+    image = :egd.create(@image_width, @image_height)
     fill = :egd.color(color)
 
-    Enum.each(squares, fn {start, stop} ->
-      :egd.filledRectangle(image, start, stop, fill)
+    Enum.each(squares, fn {top_left, bottom_right} ->
+      :ok = :egd.filledRectangle(image, top_left, bottom_right, fill)
     end)
 
     binary = :egd.render(image)

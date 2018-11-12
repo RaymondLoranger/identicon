@@ -2,13 +2,15 @@ defmodule Identicon.Image do
   alias __MODULE__
   alias __MODULE__.Builder
 
-  @enforce_keys [:charlist]
-  defstruct charlist: [], color: {}, indexes: [], squares: []
+  @enforce_keys [:bytes]
+  defstruct bytes: [], color: {}, indexes: [], squares: []
 
   @type t :: %Image{
-          charlist: charlist,
+          bytes: list,
           color: tuple,
+          # Indexes of colored squares...
           indexes: list,
+          # Colored squares...
           squares: list
         }
 
@@ -16,6 +18,7 @@ defmodule Identicon.Image do
   def build(input) do
     input
     |> hash_input()
+    |> new()
     |> pick_color()
     |> Builder.build_indexes()
     |> Builder.build_squares()
@@ -23,14 +26,13 @@ defmodule Identicon.Image do
 
   ## Private functions
 
-  @spec new([0..255]) :: t
-  defp new(charlist), do: %Image{charlist: charlist}
+  @spec new([byte]) :: t
+  defp new(bytes), do: %Image{bytes: bytes}
 
-  @spec hash_input(String.t()) :: t
-  defp hash_input(input),
-    do: :crypto.hash(:md5, input) |> :binary.bin_to_list() |> new()
+  @spec hash_input(String.t()) :: [byte]
+  defp hash_input(input), do: :crypto.hash(:md5, input) |> :binary.bin_to_list()
 
   @spec pick_color(t) :: t
-  defp pick_color(%Image{charlist: [r, g, b | _tail]} = image),
+  defp pick_color(%Image{bytes: [r, g, b | _tail]} = image),
     do: put_in(image.color, {r, g, b})
 end

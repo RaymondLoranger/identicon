@@ -9,7 +9,7 @@ defmodule Identicon.ImageTest do
     image = %Image{
       color: {114, 179, 2},
       indexes: [0, 2, 4, 7, 10, 11, 13, 14, 22],
-      charlist: [
+      bytes: [
         114,
         179,
         2,

@@ -1,16 +1,24 @@
 defmodule Identicon.Image.Builder do
+  use PersistConfig
+
   alias Identicon.Image
 
+  @type square_index :: 0..24
+
+  @square_size Application.get_env(@app, :square_size)
+  @squares_across Application.get_env(@app, :squares_across)
+  @squares_down Application.get_env(@app, :squares_down)
+
   @spec build_indexes(Image.t()) :: Image.t()
-  def build_indexes(%Image{charlist: charlist} = image) do
+  def build_indexes(%Image{bytes: bytes} = image) do
     indexes =
-      charlist
-      # Always 5 chunks of 3 chars...
+      bytes
+      # Always 5 chunks of 3 bytes...
       |> Stream.chunk_every(3, 3, :discard)
       |> Enum.map(&mirror_row/1)
       |> List.flatten()
       |> Enum.with_index()
-      |> filter_even_indexes()
+      |> even_byte_indexes()
 
     put_in(image.indexes, indexes)
   end
@@ -19,10 +27,10 @@ defmodule Identicon.Image.Builder do
   def build_squares(%Image{indexes: indexes} = image) do
     squares =
       Enum.map(indexes, fn index ->
-        horizontal = rem(index, 5) * 50
-        vertical = div(index, 5) * 50
+        horizontal = rem(index, @squares_across) * @square_size
+        vertical = div(index, @squares_down) * @square_size
         top_left = {horizontal, vertical}
-        bottom_right = {horizontal + 50, vertical + 50}
+        bottom_right = {horizontal + @square_size, vertical + @square_size}
         {top_left, bottom_right}
       end)
 
@@ -31,15 +39,15 @@ defmodule Identicon.Image.Builder do
 
   ## Private functions
 
-  @spec mirror_row([0..255]) :: [0..255]
+  @spec mirror_row([byte]) :: [byte]
   defp mirror_row([first, second, _third] = row), do: row ++ [second, first]
 
-  @spec filter_even_indexes([{0..255, 0..24}]) :: [0..24]
-  defp filter_even_indexes(tuples) do
+  @spec even_byte_indexes([{byte, square_index}]) :: [square_index]
+  defp even_byte_indexes(tuples) do
     require Integer
 
     tuples
-    |> Enum.filter(fn {char, _index} -> Integer.is_even(char) end)
-    |> Enum.map(fn {_char, index} -> index end)
+    |> Enum.filter(fn {byte, _index} -> Integer.is_even(byte) end)
+    |> Enum.map(fn {_byte, index} -> index end)
   end
 end

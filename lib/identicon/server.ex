@@ -26,11 +26,11 @@ defmodule Identicon.Server do
 
   ## Private functions
 
-  @spec phrase(String.t(), term) :: String.t()
-  defp phrase(input, result),
-    do: "`handle_cast` to depict #{inspect(input)} => #{inspect(result)}"
-
   @spec log(String.t(), term) :: :ok | {:error, term}
   defp log(input, :ok), do: input |> phrase(:ok) |> Logger.info()
   defp log(input, charlist), do: input |> phrase(charlist) |> Logger.error()
+
+  @spec phrase(String.t(), term) :: String.t()
+  defp phrase(input, result),
+    do: "`handle_cast` to depict #{inspect(input)} => #{inspect(result)}"
 end
