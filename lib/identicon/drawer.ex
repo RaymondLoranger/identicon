@@ -3,9 +3,8 @@ defmodule Identicon.Drawer do
 
   alias Identicon.Image
 
-  @folder Application.get_env(@app, :target_folder)
-  @prog Application.get_env(@app, :program)
-  @sep Application.get_env(@app, :separator)
+  @identicon_dir Application.get_env(@app, :identicon_dir)
+  @identicon_pgm Application.get_env(@app, :identicon_pgm)
 
   @spec depict(String.t()) :: :ok | {:error, File.posix()}
   def depict(input) do
@@ -18,11 +17,11 @@ defmodule Identicon.Drawer do
   ## Private functions
 
   @spec draw_image(Image.t()) :: binary
-  defp draw_image(%Image{color: color, pixel_map: pixel_map}) do
+  defp draw_image(%Image{color: color, squares: squares}) do
     image = :egd.create(250, 250)
     fill = :egd.color(color)
 
-    Enum.each(pixel_map, fn {start, stop} ->
+    Enum.each(squares, fn {start, stop} ->
       :egd.filledRectangle(image, start, stop, fill)
     end)
 
@@ -33,13 +32,13 @@ defmodule Identicon.Drawer do
 
   @spec show_image(binary, String.t()) :: :ok | {:error, File.posix()}
   defp show_image(image, file_name) do
-    # Folder(s) may already exist(s)...
-    with _any <- File.mkdir_p(@folder),
-         file <- "#{@folder}#{@sep}#{file_name}.png",
-         :ok <- File.write(file, image),
-         cmd <- @prog ++ ' "' ++ String.to_charlist(file) ++ '"',
-         _pid <- spawn(:os, :cmd, [cmd]),
+    file_path = Path.expand("#{@identicon_dir}#{file_name}.png")
+    cmd = String.to_charlist(~s[#{@identicon_pgm} "#{file_path}"])
+
+    with :ok <- File.mkdir_p(@identicon_dir),
+         :ok <- File.write(file_path, image),
+         pid when is_pid(pid) <- spawn(:os, :cmd, [cmd]),
          do: :ok,
-         else: (error -> error)
+         else: ({:error, reason} -> {:error, reason})
   end
 end

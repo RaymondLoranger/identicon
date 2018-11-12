@@ -5,18 +5,7 @@ use Mix.Config
 # Mix messages in colors...
 config :elixir, ansi_enabled: true
 
-config :logger,
-  backends: [
-    # :console,
-    {LoggerFileBackend, :info_log}
-  ]
-
-# Purges debug messages...
-config :logger, compile_time_purge_level: :info
-
-# Prevents debug messages...
-config :logger, level: :info
-
+# Listed by ascending log level...
 config :logger, :console,
   colors: [
     debug: :light_cyan,
@@ -27,11 +16,29 @@ config :logger, :console,
 
 format = "$date $time [$level] $levelpad$message\n"
 
-config :logger, :console, format: format
+error_path = "./log/error.log"
+info_path = "./log/info.log"
 
-config :logger, :info_log, format: format
-config :logger, :info_log, path: "./log/info.log", level: :info
+config :logger, :console, format: format
+config :logger, :error_log, format: format, path: error_path, level: :error
+config :logger, :info_log, format: format, path: info_path, level: :info
+
+config :logger,
+  backends: [
+    # :console,
+    {LoggerFileBackend, :error_log},
+    {LoggerFileBackend, :info_log}
+  ]
+
+# Purges debug messages...
+config :logger, compile_time_purge_level: :info
+
+# Keeps only error messages...
+# config :logger, compile_time_purge_level: :error
+
+# Uncomment to stop logging...
+# config :logger, level: :error
 
 #     import_config "#{Mix.env}.exs"
+import_config "persist_course_ref.exs"
 import_config "persist.exs"
-import_config "persist_book_ref.exs"

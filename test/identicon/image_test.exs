@@ -8,18 +8,8 @@ defmodule Identicon.ImageTest do
   setup_all do
     image = %Image{
       color: {114, 179, 2},
-      grid: [
-        {114, 0},
-        {2, 2},
-        {114, 4},
-        {122, 7},
-        {34, 10},
-        {138, 11},
-        {138, 13},
-        {34, 14},
-        {124, 22}
-      ],
-      hex: [
+      indexes: [0, 2, 4, 7, 10, 11, 13, 14, 22],
+      charlist: [
         114,
         179,
         2,
@@ -37,7 +27,7 @@ defmodule Identicon.ImageTest do
         124,
         65
       ],
-      pixel_map: [
+      squares: [
         {{0, 0}, {50, 50}},
         {{100, 0}, {150, 50}},
         {{200, 0}, {250, 50}},
@@ -54,11 +44,8 @@ defmodule Identicon.ImageTest do
   end
 
   describe "Image.build/1" do
-    # test "banana", %{image: image} do
-    #   IO.inspect(Image.build("banana"))
-    #   IO.puts()
-    #   IO.inspect(image)
-    #   assert Image.build("banana") == image
-    # end
+    test "banana", %{image: image} do
+      assert Image.build("banana") == image
+    end
   end
 end

@@ -1,12 +1,12 @@
 defmodule Identicon do
   use PersistConfig
 
-  @book_ref Application.get_env(@app, :book_ref)
+  @course_ref Application.get_env(@app, :course_ref)
 
   @moduledoc """
   Generates, writes and displays an identicon for a given input string.
 
-  ##### #{@book_ref}
+  ##### #{@course_ref}
   """
 
   alias __MODULE__.Server
@@ -19,5 +19,5 @@ defmodule Identicon do
       Identicon.depict("banana") # writes file "banana.png" and displays it
   """
   @spec depict(String.t()) :: :ok
-  def depict(input), do: GenServer.cast(Server, input)
+  def depict(input) when is_binary(input), do: GenServer.cast(Server, input)
 end
