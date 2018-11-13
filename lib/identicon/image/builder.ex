@@ -9,8 +9,8 @@ defmodule Identicon.Image.Builder do
   @squares_across Application.get_env(@app, :squares_across)
   @squares_down Application.get_env(@app, :squares_down)
 
-  @spec build_indexes(Image.t()) :: Image.t()
-  def build_indexes(%Image{bytes: bytes} = image) do
+  @spec derive_indexes(Image.t()) :: Image.t()
+  def derive_indexes(%Image{bytes: bytes} = image) do
     indexes =
       bytes
       # Always 5 chunks of 3 bytes...
@@ -23,8 +23,8 @@ defmodule Identicon.Image.Builder do
     put_in(image.indexes, indexes)
   end
 
-  @spec build_squares(Image.t()) :: Image.t()
-  def build_squares(%Image{indexes: indexes} = image) do
+  @spec derive_squares(Image.t()) :: Image.t()
+  def derive_squares(%Image{indexes: indexes} = image) do
     squares =
       Enum.map(indexes, fn index ->
         x = rem(index, @squares_across) * @square_size

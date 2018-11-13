@@ -20,8 +20,8 @@ defmodule Identicon.Image do
     |> hash_input()
     |> new()
     |> pick_color()
-    |> Builder.build_indexes()
-    |> Builder.build_squares()
+    |> Builder.derive_indexes()
+    |> Builder.derive_squares()
   end
 
   ## Private functions
