@@ -6,12 +6,12 @@ defmodule Identicon.Image do
   defstruct bytes: [], color: {}, indexes: [], squares: []
 
   @type t :: %Image{
-          bytes: list,
+          bytes: [byte],
           color: tuple,
           # Indexes of colored squares...
-          indexes: list,
+          indexes: [Builder.square_index()],
           # Colored squares...
-          squares: list
+          squares: [tuple]
         }
 
   @spec build(String.t()) :: t
