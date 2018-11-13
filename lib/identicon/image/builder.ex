@@ -27,11 +27,9 @@ defmodule Identicon.Image.Builder do
   def build_squares(%Image{indexes: indexes} = image) do
     squares =
       Enum.map(indexes, fn index ->
-        horizontal = rem(index, @squares_across) * @square_size
-        vertical = div(index, @squares_down) * @square_size
-        top_left = {horizontal, vertical}
-        bottom_right = {horizontal + @square_size, vertical + @square_size}
-        {top_left, bottom_right}
+        x = rem(index, @squares_across) * @square_size
+        y = div(index, @squares_down) * @square_size
+        {{x, y}, {x + @square_size, y + @square_size}}
       end)
 
     put_in(image.squares, squares)
@@ -44,10 +42,8 @@ defmodule Identicon.Image.Builder do
 
   @spec even_byte_indexes([{byte, square_index}]) :: [square_index]
   defp even_byte_indexes(tuples) do
-    require Integer
-
     tuples
-    |> Enum.filter(fn {byte, _index} -> Integer.is_even(byte) end)
+    |> Enum.filter(fn {byte, _index} -> rem(byte, 2) == 0 end)
     |> Enum.map(fn {_byte, index} -> index end)
   end
 end
