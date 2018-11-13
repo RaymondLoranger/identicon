@@ -6,7 +6,7 @@ use Mix.Config
     {:unix, _} -> {"open", "/"}
   end
 
-config :identicon, identicon_dir: ".#{sep}assets#{sep}identicons#{sep}"
+config :identicon, identicon_dir: ".#{sep}identicons#{sep}"
 config :identicon, identicon_pgm: identicon_pgm
 config :identicon, square_size: 50
 config :identicon, squares_across: 5
