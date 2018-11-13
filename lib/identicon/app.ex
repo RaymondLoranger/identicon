@@ -3,7 +3,8 @@ defmodule Identicon.App do
   use PersistConfig
 
   alias __MODULE__
-  alias Identicon.{FileReset, Server}
+  alias __MODULE__.FileReset
+  alias Identicon.Server
 
   @identicon_dir Application.get_env(@app, :identicon_dir)
 
