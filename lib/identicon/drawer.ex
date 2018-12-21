@@ -5,6 +5,7 @@ defmodule Identicon.Drawer do
 
   @identicon_dir Application.get_env(@app, :identicon_dir)
   @identicon_pgm Application.get_env(@app, :identicon_pgm)
+  @sep Application.get_env(@app, :sep)
   @square_size Application.get_env(@app, :square_size)
   @squares_across Application.get_env(@app, :squares_across)
   @squares_down Application.get_env(@app, :squares_down)
@@ -38,7 +39,11 @@ defmodule Identicon.Drawer do
 
   @spec show_image(binary, String.t()) :: :ok | {:error, File.posix()}
   defp show_image(image, file_name) do
-    file_path = Path.expand("#{@identicon_dir}#{file_name}.png")
+    file_path =
+      "#{@identicon_dir}/#{file_name}.png"
+      |> Path.expand()
+      |> String.replace("/", @sep)
+
     cmd = String.to_charlist(~s[#{@identicon_pgm} "#{file_path}"])
 
     with :ok <- File.mkdir_p(@identicon_dir),
