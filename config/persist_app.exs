@@ -2,7 +2,7 @@ use Mix.Config
 
 {identicon_pgm, sep} =
   case :os.type() do
-    {:win32, _} -> {"paint", "\\"}
+    {:win32, _} -> {"mspaint", "\\"}
     {:unix, _} -> {"open", "/"}
   end
 
