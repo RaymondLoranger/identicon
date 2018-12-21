@@ -1,16 +1,4 @@
 defmodule Identicon.App.FileReset do
-  @spec clear_log(Path.t()) :: :ok
-  def clear_log(log_path) do
-    log_path = Path.expand(log_path)
-    dir_path = Path.dirname(log_path)
-    create_dir(dir_path)
-
-    case File.write(log_path, "") do
-      :ok -> :ok
-      {:error, reason} -> error(reason, "Couldn't clear log file", log_path)
-    end
-  end
-
   @spec clear_dir(Path.t()) :: :ok
   def clear_dir(dir_path) do
     dir_path = Path.expand(dir_path)

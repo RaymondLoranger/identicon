@@ -31,7 +31,7 @@ config :logger,
   ]
 
 # Purges debug messages...
-config :logger, compile_time_purge_level: :info
+# config :logger, compile_time_purge_level: :info
 
 # Keeps only error messages...
 # config :logger, compile_time_purge_level: :error
@@ -39,5 +39,5 @@ config :logger, compile_time_purge_level: :info
 # Uncomment to stop logging...
 # config :logger, level: :error
 
-import_config "#{Mix.env()}.exs"
-import_config "persist*.exs"
+import_config "persist.#{Mix.env()}.exs"
+import_config "persist_*.exs"
