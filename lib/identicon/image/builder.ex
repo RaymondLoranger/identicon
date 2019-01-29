@@ -14,7 +14,7 @@ defmodule Identicon.Image.Builder do
     indexes =
       bytes
       # Always 5 chunks of 3 bytes...
-      |> Stream.chunk_every(3, 3, :discard)
+      |> Enum.chunk_every(3, 3, :discard)
       |> Enum.map(&mirror_row/1)
       |> List.flatten()
       |> Enum.with_index()
