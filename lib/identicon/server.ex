@@ -16,7 +16,7 @@ defmodule Identicon.Server do
 
   @spec handle_cast(String.t(), term) :: {:noreply, term}
   def handle_cast(input, :ok) do
-    case Drawer.depict(input) do
+    case Drawer.iconize(input) do
       :ok -> log(input, :ok)
       {:error, reason} -> log(input, :file.format_error(reason))
     end
@@ -31,6 +31,9 @@ defmodule Identicon.Server do
   defp log(input, charlist), do: input |> phrase(charlist) |> Logger.error()
 
   @spec phrase(String.t(), term) :: String.t()
-  defp phrase(input, result),
-    do: "`handle_cast` to depict #{inspect(input)} => #{inspect(result)}"
+  defp phrase(input, result) do
+    """
+    \n`handle_cast` to iconize #{inspect(input)} => #{inspect(result)}
+    """
+  end
 end

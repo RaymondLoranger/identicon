@@ -12,12 +12,12 @@ defmodule Identicon do
   alias __MODULE__.Server
 
   @doc """
-  Generates, writes and displays an identicon "depicting" a given `input`.
+  Generates, writes and displays an identicon "representing" a given `input`.
 
   ## Examples
 
-      Identicon.depict("banana") # writes file "banana.png" and displays it
+      Identicon.iconize("banana") # Writes file "banana.png" and displays it.
   """
-  @spec depict(String.t()) :: :ok
-  def depict(input) when is_binary(input), do: GenServer.cast(Server, input)
+  @spec iconize(String.t()) :: :ok
+  def iconize(input) when is_binary(input), do: GenServer.cast(Server, input)
 end

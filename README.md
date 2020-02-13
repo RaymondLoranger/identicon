@@ -19,4 +19,4 @@ From the "identicon" folder, start the interactive shell:
 
   - cd identicon
   - iex -S mix
-  - Identicon.depict("banana") # writes file "banana.png" and displays it
+  - Identicon.iconize("banana") # Writes file "banana.png" and displays it.

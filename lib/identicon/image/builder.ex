@@ -20,6 +20,7 @@ defmodule Identicon.Image.Builder do
       |> Enum.with_index()
       |> even_byte_indexes()
 
+    # Indexes of colored squares...
     put_in(image.indexes, indexes)
   end
 
@@ -29,6 +30,7 @@ defmodule Identicon.Image.Builder do
       Enum.map(indexes, fn index ->
         x = rem(index, @squares_across) * @square_size
         y = div(index, @squares_down) * @square_size
+        # Corners (top-left and bottom-right) of colored squares...
         {{x, y}, {x + @square_size, y + @square_size}}
       end)
 

@@ -4,7 +4,7 @@ defmodule Identicon.Drawer do
   alias Identicon.Image
 
   @identicon_dir Application.get_env(@app, :identicon_dir)
-  @identicon_pgm Application.get_env(@app, :identicon_pgm)
+  @open_with Application.get_env(@app, :open_with)
   @sep Application.get_env(@app, :sep)
   @square_size Application.get_env(@app, :square_size)
   @squares_across Application.get_env(@app, :squares_across)
@@ -13,8 +13,8 @@ defmodule Identicon.Drawer do
   @image_width @square_size * @squares_across
   @image_height @square_size * @squares_down
 
-  @spec depict(String.t()) :: :ok | {:error, File.posix()}
-  def depict(input) do
+  @spec iconize(String.t()) :: :ok | {:error, File.posix()}
+  def iconize(input) do
     input
     |> Image.build()
     |> draw_image()
@@ -44,7 +44,7 @@ defmodule Identicon.Drawer do
       |> Path.expand()
       |> String.replace("/", @sep)
 
-    cmd = String.to_charlist(~s[#{@identicon_pgm} "#{file_path}"])
+    cmd = String.to_charlist(~s[#{@open_with} "#{file_path}"])
 
     with :ok <- File.mkdir_p(@identicon_dir),
          :ok <- File.write(file_path, image),

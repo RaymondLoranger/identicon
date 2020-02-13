@@ -1,4 +1,4 @@
-defmodule Identicon.App do
+defmodule Identicon.Top do
   @moduledoc false
 
   use Application
@@ -19,7 +19,7 @@ defmodule Identicon.App do
       # Child spec relying on use GenServer...
       {Server, :ok}
     ]
-    |> Supervisor.start_link(name: App, strategy: :one_for_one)
+    |> Supervisor.start_link(name: Top, strategy: :one_for_one)
   end
 
   ## Private functions

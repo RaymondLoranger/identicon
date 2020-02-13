@@ -1,11 +1,11 @@
-defmodule Identicon.App.FileReset do
+defmodule Identicon.Top.FileReset do
   @spec clear_dir(Path.t()) :: :ok
   def clear_dir(dir_path) do
     dir_path = Path.expand(dir_path)
 
     case File.rm_rf(dir_path) do
-      {:ok, _files_and_directories} -> :ok
-      {:error, reason, dir?} -> error(reason, "Couldn't delete", dir?)
+      {:ok, _files_and_dirs} -> :ok
+      {:error, reason, path} -> error(reason, "Couldn't delete", path)
     end
 
     create_dir(dir_path)
