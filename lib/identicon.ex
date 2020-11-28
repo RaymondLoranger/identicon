@@ -1,23 +1,27 @@
 defmodule Identicon do
-  use PersistConfig
-
-  @course_ref Application.get_env(@app, :course_ref)
-
   @moduledoc """
-  Generates, writes and displays an identicon for a given input string.
+  Populates and shows a PNG file representing an input string.
 
-  ##### #{@course_ref}
+  ##### Based on the course [The Complete Elixir and Phoenix Bootcamp](https://www.udemy.com/the-complete-elixir-and-phoenix-bootcamp-and-tutorial/) by Stephen Grider.
   """
 
-  alias __MODULE__.Server
+  alias __MODULE__.DirPath.Server
 
   @doc """
-  Generates, writes and displays an identicon "representing" a given `input`.
+  Populates and shows a PNG file representing a given `input` string.
 
   ## Examples
 
-      Identicon.iconize("banana") # Writes file "banana.png" and displays it.
+      iex> Identicon.show("fig") # Writes to and opens file "fig.png".
+      :ok
   """
-  @spec iconize(String.t()) :: :ok
-  def iconize(input) when is_binary(input), do: GenServer.cast(Server, input)
+  @spec show(String.t()) :: :ok
+  def show(input) when is_binary(input) do
+    :ok = GenServer.call(Server, {:show, input})
+  end
+
+  @spec clear_dir :: :ok
+  def clear_dir do
+    :ok = GenServer.call(Server, :clear_dir)
+  end
 end

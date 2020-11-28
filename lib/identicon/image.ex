@@ -14,11 +14,11 @@ defmodule Identicon.Image do
           squares: [tuple]
         }
 
-  @spec build(String.t()) :: t
-  def build(input) do
+  @spec new(String.t()) :: t
+  def new(input) do
     input
     |> hash_input()
-    |> new()
+    |> init()
     |> pick_color()
     |> Builder.derive_indexes()
     |> Builder.derive_squares()
@@ -26,11 +26,14 @@ defmodule Identicon.Image do
 
   ## Private functions
 
-  @spec new([byte]) :: t
-  defp new(bytes), do: %Image{bytes: bytes}
+  @spec init([byte]) :: t
+  defp init(bytes), do: %Image{bytes: bytes}
 
   @spec hash_input(String.t()) :: [byte]
-  defp hash_input(input), do: :crypto.hash(:md5, input) |> :binary.bin_to_list()
+  defp hash_input(input) do
+    # Always returns 16 bytes...
+    :crypto.hash(:md5, input) |> :binary.bin_to_list()
+  end
 
   @spec pick_color(t) :: t
   defp pick_color(%Image{bytes: [r, g, b | _tail]} = image),

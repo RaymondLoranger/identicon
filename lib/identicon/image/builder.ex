@@ -5,15 +5,15 @@ defmodule Identicon.Image.Builder do
 
   @type square_index :: 0..24
 
-  @square_size Application.get_env(@app, :square_size)
-  @squares_across Application.get_env(@app, :squares_across)
-  @squares_down Application.get_env(@app, :squares_down)
+  @squares_across get_env(:squares_across)
+  @squares_down get_env(:squares_down)
+  @square_size get_env(:square_size)
 
   @spec derive_indexes(Image.t()) :: Image.t()
   def derive_indexes(%Image{bytes: bytes} = image) do
     indexes =
       bytes
-      # Always 5 chunks of 3 bytes...
+      # 16 bytes => 5 chunks of 3 bytes discarding the 16th byte...
       |> Enum.chunk_every(3, 3, :discard)
       |> Enum.map(&mirror_row/1)
       |> List.flatten()
@@ -44,8 +44,6 @@ defmodule Identicon.Image.Builder do
 
   @spec even_byte_indexes([{byte, square_index}]) :: [square_index]
   defp even_byte_indexes(tuples) do
-    tuples
-    |> Enum.filter(fn {byte, _index} -> rem(byte, 2) == 0 end)
-    |> Enum.map(fn {_byte, index} -> index end)
+    for {byte, index} <- tuples, rem(byte, 2) == 0, do: index
   end
 end
