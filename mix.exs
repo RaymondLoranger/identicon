@@ -4,7 +4,7 @@ defmodule Identicon.MixProject do
   def project do
     [
       app: :identicon,
-      version: "0.1.14",
+      version: "0.1.15",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       # dialyzer: [plt_add_apps: [:mix]],

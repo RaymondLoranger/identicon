@@ -8,7 +8,7 @@ defmodule Identicon.Log do
       #{inspect(dir_path)}
     • Removed: #{phrase(removed_files_or_dirs)}
     • Inside function:
-      #{function(env)}
+      #{fun(env)}
     #{from()}
     """
   end
@@ -20,7 +20,7 @@ defmodule Identicon.Log do
       #{inspect(dir_path)}
     • Command: #{open_with}...
     • Inside function:
-      #{function(env)}
+      #{fun(env)}
     #{from()}
     """
   end
@@ -33,7 +33,7 @@ defmodule Identicon.Log do
     • Reason:
       #{reason |> :file.format_error() |> inspect()}
     • Inside function:
-      #{function(env)}
+      #{fun(env)}
     #{from()}
     """
   end
@@ -48,7 +48,7 @@ defmodule Identicon.Log do
     • Non-matched value:
       #{inspect(non_matched)}
     • Inside function:
-      #{function(env)}
+      #{fun(env)}
     #{from()}
     """
   end
@@ -63,13 +63,4 @@ defmodule Identicon.Log do
   defp phrase(removed_files_or_dirs) do
     "#{length(removed_files_or_dirs) - 1} files or directories"
   end
-
-  @spec function(Macro.Env.t()) :: String.t()
-  defp function(%Macro.Env{function: {name, arity}} = env) do
-    if name |> to_string() |> String.contains?(" "),
-      do: "#{inspect(env.module)}.'#{name}'/#{arity}",
-      else: "#{inspect(env.module)}.#{name}/#{arity}"
-  end
-
-  defp function(%Macro.Env{function: nil}), do: "'not inside a function'"
 end
