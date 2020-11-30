@@ -15,18 +15,14 @@ defmodule Identicon.DirPath do
     file_path = "#{dir_path}/#{input}.png" |> String.replace("/", sep())
     open_with = open_with()
     cmd = to_charlist(~s[#{open_with} "#{file_path}"])
+    binary = input |> Image.new() |> Drawer.render()
 
-    with %Image{} = image <- Image.new(input),
-         binary when is_binary(binary) <- Drawer.render(image),
-         :ok <- File.write(file_path, binary),
-         pid when is_pid(pid) <- spawn(:os, :cmd, [cmd]) do
+    with :ok <- File.write(file_path, binary),
+         spawn(:os, :cmd, [cmd]) do
       :ok = Log.info(:identicon_shown, {input, dir_path, open_with, __ENV__})
     else
       {:error, reason} ->
-        :ok = Log.error(:cannot_show, {input, dir_path, reason, __ENV__})
-
-      non_matched ->
-        :ok = Log.error(:non_matched, {input, dir_path, non_matched, __ENV__})
+        :ok = Log.error(:cannot_write, {input, dir_path, reason, __ENV__})
     end
   end
 

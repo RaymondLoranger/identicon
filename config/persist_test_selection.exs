@@ -7,3 +7,9 @@ config :identicon,
       # show: 1,
     ],
   }
+
+# Allows to run one test at a time...
+config :identicon,
+  excluded_tags: [
+    # :identicon_image_test_1,
+  ]

@@ -31,9 +31,7 @@ defmodule Identicon.DirPath.Server do
     {:noreply, dir_path}
   end
 
-  def handle_info(_message, state) do
-    {:noreply, state}
-  end
+  def handle_info(_message, dir_path), do: {:noreply, dir_path}
 
   @spec handle_call(request, from, DirPath.t()) :: handle_call
   def handle_call(:clear_dir, _from, dir_path) do
