@@ -41,11 +41,15 @@ defmodule Identicon.Log do
   ## Private functions
 
   @spec phrase([binary]) :: String.t()
-  defp phrase(removed_files_or_dirs) when length(removed_files_or_dirs) == 2 do
+  defp phrase(files_or_dirs) when length(files_or_dirs) in [0, 1] do
+    "0 files or directories"
+  end
+
+  defp phrase(files_or_dirs) when length(files_or_dirs) == 2 do
     "1 file or directory"
   end
 
-  defp phrase(removed_files_or_dirs) do
-    "#{length(removed_files_or_dirs) - 1} files or directories"
+  defp phrase(files_or_dirs) do
+    "#{length(files_or_dirs) - 1} files or directories"
   end
 end

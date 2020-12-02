@@ -12,22 +12,22 @@ config :identicon, sep: sep
 
 # case config_env() do
 #   :dev ->
-#     config :file_only_logger, log?: :true
+#     config :file_only_logger, log?: true
 #     config :identicon, dir_reset?: false
 #     config :log_reset, levels: :all
 
 #   :prod ->
-#     config :file_only_logger, log?: :true
+#     config :file_only_logger, log?: true
 #     config :identicon, dir_reset?: false
 #     config :log_reset, levels: :all
 
 #   :test ->
-#     config :file_only_logger, log?: :true
-#     config :identicon, dir_reset?: false
+#     config :file_only_logger, log?: true
+#     config :identicon, dir_reset?: true
 #     config :log_reset, levels: :all
 
 #   _ ->
-#     config :file_only_logger, log?: :true
+#     config :file_only_logger, log?: true
 #     config :identicon, dir_reset?: false
 #     config :log_reset, levels: :all
 # end

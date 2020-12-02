@@ -12,7 +12,7 @@ defmodule Identicon do
 
   ## Examples
 
-      iex> Identicon.show("fig") # Writes to and opens file "fig.png".
+      iex> Identicon.show("guava") # Writes to and opens file "guava.png".
       :ok
   """
   @spec show(String.t()) :: :ok
