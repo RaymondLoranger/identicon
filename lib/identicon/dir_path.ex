@@ -8,14 +8,14 @@ defmodule Identicon.DirPath do
   @type t :: Path.t()
 
   @spec new :: t
-  def new, do: :dir_path |> get_env(@def_dir_path) |> Path.expand()
+  def new, do: get_env(:dir_path, @def_dir_path) |> Path.expand()
 
   @spec show(t, String.t()) :: :ok
   def show(dir_path, input) do
     file_path = "#{dir_path}/#{input}.png" |> String.replace("/", sep())
     open_with = open_with()
     cmd = to_charlist(~s[#{open_with} "#{file_path}"])
-    binary = input |> Image.new() |> Drawer.render()
+    binary = Image.new(input) |> Drawer.render()
 
     with :ok <- File.write(file_path, binary),
          spawn(:os, :cmd, [cmd]) do

@@ -33,7 +33,7 @@ defmodule Identicon.Log do
     • Directory:
       #{inspect(dir_path)}
     • Reason:
-      #{reason |> :file.format_error() |> inspect()}
+      #{:file.format_error(reason) |> inspect()}
     #{from()}
     """
   end
