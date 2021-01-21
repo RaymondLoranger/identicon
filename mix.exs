@@ -4,7 +4,7 @@ defmodule Identicon.MixProject do
   def project do
     [
       app: :identicon,
-      version: "0.1.18",
+      version: "0.1.19",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       # dialyzer: [plt_add_apps: [:mix]],
@@ -28,8 +28,6 @@ defmodule Identicon.MixProject do
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:file_only_logger, "~> 0.1"},
       {:log_reset, "~> 0.1"},
-      {:mix_tasks,
-       github: "RaymondLoranger/mix_tasks", only: :dev, runtime: false},
       {:persist_config, "~> 0.4", runtime: false}
     ]
   end
