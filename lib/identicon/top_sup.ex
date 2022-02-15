@@ -5,10 +5,11 @@ defmodule Identicon.TopSup do
   alias __MODULE__
   alias Identicon.DirPath.Server
 
+  # @impl Application
   @spec start(Application.start_type(), term) :: {:ok, pid}
-  def start(_type, :ok) do
+  def start(_start_type, :ok = _start_args) do
     [
-      # Child spec relying on use GenServer...
+      # Child spec relying on `use GenServer`...
       {Server, dir_reset?()}
     ]
     |> Supervisor.start_link(name: TopSup, strategy: :one_for_one)

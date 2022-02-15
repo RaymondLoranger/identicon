@@ -1,31 +1,31 @@
 defmodule Identicon.DirPath.Server do
+  @moduledoc """
+  A server process that holds the identicon directory path as its state.
+  """
+
   use GenServer
 
   alias __MODULE__
   alias Identicon.DirPath
 
-  @type from :: GenServer.from()
-  @type handle_call :: {:reply, reply :: term, state :: DirPath.t()}
-  @type handle_info :: {:noreply, state :: DirPath.t()}
-  @type init :: {:ok, state :: DirPath.t()}
-  @type message :: tuple
-  @type on_start :: GenServer.on_start()
-  @type request :: atom | tuple
-
-  @spec start_link(term) :: on_start
+  @doc """
+  Spawns an identicon directory path server process.
+  """
+  @spec start_link(term) :: GenServer.on_start()
   def start_link(dir_reset?) do
     GenServer.start_link(Server, dir_reset?, name: Server)
   end
 
   ## Callbacks
 
-  @spec init(term) :: init
+  @spec init(term) :: {:ok, state :: DirPath.t()}
   def init(dir_reset?) do
     self() |> send({:clear_dir, dir_reset?})
     {:ok, DirPath.new()}
   end
 
-  @spec handle_info(message, DirPath.t()) :: handle_info
+  @spec handle_info(msg :: tuple, state :: DirPath.t()) ::
+          {:noreply, state :: DirPath.t()}
   def handle_info({:clear_dir, dir_reset?}, dir_path) do
     :ok = DirPath.clear_dir(dir_path, dir_reset?)
     {:noreply, dir_path}
@@ -33,7 +33,8 @@ defmodule Identicon.DirPath.Server do
 
   def handle_info(_message, dir_path), do: {:noreply, dir_path}
 
-  @spec handle_call(request, from, DirPath.t()) :: handle_call
+  @spec handle_call(request :: atom | tuple, GenServer.from(), DirPath.t()) ::
+          {:reply, reply :: term, state :: DirPath.t()}
   def handle_call(:clear_dir, _from, dir_path) do
     :ok = DirPath.clear_dir(dir_path)
     {:reply, :ok, dir_path}

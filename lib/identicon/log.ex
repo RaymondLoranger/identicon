@@ -4,37 +4,27 @@ defmodule Identicon.Log do
   info :dir_cleared, {dir_path, removed_files_or_dirs, env} do
     """
     \nIdenticon directory cleared successfully...
-    • Inside function:
-      #{fun(env)}
-    • Directory:
-      #{inspect(dir_path)}
-    • Removed: #{phrase(removed_files_or_dirs)}
-    #{from()}
+    • Directory: #{inspect(dir_path) |> maybe_break(13)}
+    • Removed: #{phrase(removed_files_or_dirs) |> maybe_break(11)}
+    #{from(env, __MODULE__)}
     """
   end
 
   info :identicon_shown, {input, dir_path, open_with, env} do
     """
     \nIdenticon in file "#{input}.png" shown successfully...
-    • Inside function:
-      #{fun(env)}
-    • Directory:
-      #{inspect(dir_path)}
+    • Directory: #{inspect(dir_path) |> maybe_break(13)}
     • Command: #{open_with}...
-    #{from()}
+    #{from(env, __MODULE__)}
     """
   end
 
   error :cannot_write, {input, dir_path, reason, env} do
     """
     \nCannot write identicon into file "#{input}.png"...
-    • Inside function:
-      #{fun(env)}
-    • Directory:
-      #{inspect(dir_path)}
-    • Reason:
-      #{:file.format_error(reason) |> inspect()}
-    #{from()}
+    • Directory: #{inspect(dir_path) |> maybe_break(13)}
+    • Reason: #{:file.format_error(reason) |> inspect() |> maybe_break(10)}
+    #{from(env, __MODULE__)}
     """
   end
 

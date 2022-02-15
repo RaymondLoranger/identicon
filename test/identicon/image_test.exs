@@ -34,9 +34,9 @@ defmodule Identicon.ImageTest do
   end
 
   describe "Image.build/1" do
-    @tag :identicon_image_test_1
+    @tag :image_test_1
     TestHelper.config_level(__MODULE__)
-    
+
     test "banana", %{image: image} do
       assert Image.new("banana") == image
     end

@@ -3,12 +3,15 @@ defmodule Identicon.DirPath do
 
   alias Identicon.{Drawer, Image, Log}
 
-  @def_dir_path get_env(:def_dir_path)
+  @default_dir_path get_env(:default_dir_path)
 
   @type t :: Path.t()
 
+  @doc """
+  Returns the absolute path of the configured identicon directory.
+  """
   @spec new :: t
-  def new, do: get_env(:dir_path, @def_dir_path) |> Path.expand()
+  def new, do: get_env(:dir_path, @default_dir_path) |> Path.expand()
 
   @spec show(t, String.t()) :: :ok
   def show(dir_path, input) do
@@ -26,16 +29,19 @@ defmodule Identicon.DirPath do
     end
   end
 
+  @doc """
+  Removes the files and subdirectories of directory `dir_path`.
+  """
   @spec clear_dir(t, boolean) :: :ok
   def clear_dir(dir_path, dir_reset? \\ true)
 
   def clear_dir(dir_path, _dir_reset? = true) do
-    removed_files_or_dirs = File.rm_rf!(dir_path)
+    {:ok, removed_files_and_dirs} = File.rm_rf(dir_path)
     clear_dir(dir_path, false)
-    :ok = Log.info(:dir_cleared, {dir_path, removed_files_or_dirs, __ENV__})
+    :ok = Log.info(:dir_cleared, {dir_path, removed_files_and_dirs, __ENV__})
   end
 
-  def clear_dir(dir_path, _no_dir_reset), do: :ok = File.mkdir_p!(dir_path)
+  def clear_dir(dir_path, _dir_reset?), do: :ok = File.mkdir_p(dir_path)
 
   ## Private functions
 
