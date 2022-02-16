@@ -10,6 +10,7 @@ defmodule Identicon.DirPath do
 
   @default_dir_path get_env(:default_dir_path)
 
+  @typedoc "Identicon directory path"
   @type t :: Path.t()
 
   @doc """

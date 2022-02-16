@@ -5,7 +5,7 @@
 defmodule Identicon do
   @moduledoc """
   Opens a PNG file populated with an identicon derived from an input string.
-
+  
   ##### Based on the course [The Complete Elixir and Phoenix Bootcamp](https://www.udemy.com/the-complete-elixir-and-phoenix-bootcamp-and-tutorial/) by Stephen Grider.
   """
 
@@ -16,9 +16,9 @@ defmodule Identicon do
 
   @doc """
   Opens a PNG file populated with an identicon derived from `input`.
-
+  
   ## Examples
-
+  
       iex> Identicon.show("guava") # Writes to and opens file "guava.png".
       :ok
   """
@@ -29,9 +29,9 @@ defmodule Identicon do
 
   @doc """
   Clears the configured identicon directory.
-
+  
   ## Examples
-
+  
       iex> Identicon.clear_dir()
       :ok
   """

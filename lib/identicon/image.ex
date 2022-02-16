@@ -1,7 +1,7 @@
 defmodule Identicon.Image do
   @moduledoc """
   Creates an image struct to be converted into an identicon.
-
+  
   The image struct contains the fields `bytes`, `color`, `indexes` and
   `squares` representing the characteristics of an identicon.
   """
