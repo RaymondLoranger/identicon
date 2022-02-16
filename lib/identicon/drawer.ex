@@ -16,10 +16,10 @@ defmodule Identicon.Drawer do
   @image_width @square_size * @squares_across
 
   @doc """
-  Converts an image struct into an identicon.
+  Converts image struct `image` into an identicon.
   """
   @spec render(Image.t()) :: Identicon.t()
-  def render(%Image{color: color, squares: squares}) do
+  def render(%Image{color: color, squares: squares} = _image) do
     image = :egd.create(@image_width, @image_height)
     fill = :egd.color(color)
 
