@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/RaymondLoranger/identicon.svg?branch=master)](https://travis-ci.org/RaymondLoranger/identicon)
 
-Populates and shows a PNG file representing an input string.
+Opens a PNG file populated with an identicon derived from an input string.
 
 ##### Based on the course [The Complete Elixir and Phoenix Bootcamp](https://www.udemy.com/the-complete-elixir-and-phoenix-bootcamp-and-tutorial/) by Stephen Grider.
 

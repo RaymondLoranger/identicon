@@ -1,11 +1,11 @@
 defmodule Identicon.Log do
   use File.Only.Logger
 
-  info :dir_cleared, {dir_path, removed_files_or_dirs, env} do
+  info :dir_cleared, {dir_path, removed_files_and_dirs, env} do
     """
     \nIdenticon directory cleared successfully...
     • Directory: #{inspect(dir_path) |> maybe_break(13)}
-    • Removed: #{phrase(removed_files_or_dirs) |> maybe_break(11)}
+    • Removed: #{phrase(removed_files_and_dirs) |> maybe_break(11)}
     #{from(env, __MODULE__)}
     """
   end
@@ -31,15 +31,15 @@ defmodule Identicon.Log do
   ## Private functions
 
   @spec phrase([binary]) :: String.t()
-  defp phrase(files_or_dirs) when length(files_or_dirs) in [0, 1] do
+  defp phrase(files_and_dirs) when length(files_and_dirs) in [0, 1] do
     "0 files or directories"
   end
 
-  defp phrase(files_or_dirs) when length(files_or_dirs) == 2 do
+  defp phrase(files_and_dirs) when length(files_and_dirs) == 2 do
     "1 file or directory"
   end
 
-  defp phrase(files_or_dirs) do
-    "#{length(files_or_dirs) - 1} files or directories"
+  defp phrase(files_and_dirs) do
+    "#{length(files_and_dirs) - 1} files or directories"
   end
 end

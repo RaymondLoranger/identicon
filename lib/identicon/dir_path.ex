@@ -1,4 +1,9 @@
 defmodule Identicon.DirPath do
+  @moduledoc """
+  Creates or clears the configured identicon directory.
+  Also populates a PNG file with an identicon and opens that file.
+  """
+
   use PersistConfig
 
   alias Identicon.{Drawer, Image, Log}
@@ -13,6 +18,9 @@ defmodule Identicon.DirPath do
   @spec new :: t
   def new, do: get_env(:dir_path, @default_dir_path) |> Path.expand()
 
+  @doc """
+  Populates a PNG file with an identicon and opens that file.
+  """
   @spec show(t, String.t()) :: :ok
   def show(dir_path, input) do
     file_path = "#{dir_path}/#{input}.png" |> String.replace("/", sep())
@@ -21,7 +29,7 @@ defmodule Identicon.DirPath do
     binary = Image.new(input) |> Drawer.render()
 
     with :ok <- File.write(file_path, binary),
-         spawn(:os, :cmd, [cmd]) do
+         _pid = spawn(:os, :cmd, [cmd]) do
       :ok = Log.info(:identicon_shown, {input, dir_path, open_with, __ENV__})
     else
       {:error, reason} ->
@@ -30,18 +38,22 @@ defmodule Identicon.DirPath do
   end
 
   @doc """
-  Removes the files and subdirectories of directory `dir_path`.
+  Creates directory `dir_path`.
   """
-  @spec clear_dir(t, boolean) :: :ok
-  def clear_dir(dir_path, dir_reset? \\ true)
-
-  def clear_dir(dir_path, _dir_reset? = true) do
-    {:ok, removed_files_and_dirs} = File.rm_rf(dir_path)
-    clear_dir(dir_path, false)
-    :ok = Log.info(:dir_cleared, {dir_path, removed_files_and_dirs, __ENV__})
+  @spec create_dir(t) :: :ok
+  def create_dir(dir_path) do
+    :ok = File.mkdir_p(dir_path)
   end
 
-  def clear_dir(dir_path, _dir_reset?), do: :ok = File.mkdir_p(dir_path)
+  @doc """
+  Removes the files and subdirectories of directory `dir_path`.
+  """
+  @spec clear_dir(t) :: :ok
+  def clear_dir(dir_path) do
+    {:ok, removed_files_and_dirs} = File.rm_rf(dir_path)
+    :ok = create_dir(dir_path)
+    :ok = Log.info(:dir_cleared, {dir_path, removed_files_and_dirs, __ENV__})
+  end
 
   ## Private functions
 

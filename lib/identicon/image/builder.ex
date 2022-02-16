@@ -1,4 +1,8 @@
 defmodule Identicon.Image.Builder do
+  @moduledoc """
+  Updates the last fields of an image struct.
+  """
+
   use PersistConfig
 
   alias Identicon.Image
@@ -9,6 +13,9 @@ defmodule Identicon.Image.Builder do
   @squares_down get_env(:squares_down)
   @square_size get_env(:square_size)
 
+  @doc """
+  Updates field `indexes` of image struct `image`.
+  """
   @spec derive_indexes(Image.t()) :: Image.t()
   def derive_indexes(%Image{bytes: bytes} = image) do
     indexes =
@@ -24,6 +31,9 @@ defmodule Identicon.Image.Builder do
     put_in(image.indexes, indexes)
   end
 
+  @doc """
+  Updates field `squares` of image struct `image`.
+  """
   @spec derive_squares(Image.t()) :: Image.t()
   def derive_squares(%Image{indexes: indexes} = image) do
     squares =

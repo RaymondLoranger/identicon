@@ -10,13 +10,8 @@ defmodule Identicon.TopSup do
   def start(_start_type, :ok = _start_args) do
     [
       # Child spec relying on `use GenServer`...
-      {Server, dir_reset?()}
+      {Server, :ok}
     ]
     |> Supervisor.start_link(name: TopSup, strategy: :one_for_one)
   end
-
-  ## Private functions
-
-  @spec dir_reset? :: boolean
-  defp dir_reset?, do: get_env(:dir_reset?, false)
 end

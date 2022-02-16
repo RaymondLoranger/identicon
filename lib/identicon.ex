@@ -4,15 +4,18 @@
 # └────────────────────────────────────────────────────────────────┘
 defmodule Identicon do
   @moduledoc """
-  Populates and opens a PNG file representing an input string.
+  Opens a PNG file populated with an identicon derived from an input string.
 
   ##### Based on the course [The Complete Elixir and Phoenix Bootcamp](https://www.udemy.com/the-complete-elixir-and-phoenix-bootcamp-and-tutorial/) by Stephen Grider.
   """
 
   alias __MODULE__.DirPath.Server
 
+  @typedoc "Identicon"
+  @type t :: binary
+
   @doc """
-  Populates and opens a PNG file representing a given `input` string.
+  Opens a PNG file populated with an identicon derived from `input`.
 
   ## Examples
 

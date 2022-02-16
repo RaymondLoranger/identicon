@@ -1,10 +1,18 @@
 defmodule Identicon.Image do
+  @moduledoc """
+  Creates an image struct to be converted into an identicon.
+
+  The image struct contains the fields `bytes`, `color`, `indexes` and
+  `squares` representing the characteristics of an identicon.
+  """
+
   alias __MODULE__
   alias __MODULE__.Builder
 
   @enforce_keys [:bytes]
   defstruct bytes: [], color: {}, indexes: [], squares: []
 
+  @typedoc "An image struct"
   @type t :: %Image{
           bytes: [byte],
           color: tuple,
@@ -14,6 +22,9 @@ defmodule Identicon.Image do
           squares: [tuple]
         }
 
+  @doc """
+  Creates an image struct from the given `input`.
+  """
   @spec new(String.t()) :: t
   def new(input) do
     input

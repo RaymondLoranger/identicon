@@ -1,6 +1,11 @@
 defmodule Identicon.Drawer do
+  @moduledoc """
+  Converts an image struct into an identicon.
+  """
+
   use PersistConfig
 
+  alias Identicon
   alias Identicon.Image
 
   @squares_across get_env(:squares_across)
@@ -10,7 +15,10 @@ defmodule Identicon.Drawer do
   @image_height @square_size * @squares_down
   @image_width @square_size * @squares_across
 
-  @spec render(Image.t()) :: binary
+  @doc """
+  Converts an image struct into an identicon.
+  """
+  @spec render(Image.t()) :: Identicon.t()
   def render(%Image{color: color, squares: squares}) do
     image = :egd.create(@image_width, @image_height)
     fill = :egd.color(color)

@@ -12,22 +12,22 @@ defmodule Identicon.DirPath.Server do
   Spawns an identicon directory path server process.
   """
   @spec start_link(term) :: GenServer.on_start()
-  def start_link(dir_reset?) do
-    GenServer.start_link(Server, dir_reset?, name: Server)
+  def start_link(:ok = _init_arg) do
+    GenServer.start_link(Server, :ok, name: Server)
   end
 
   ## Callbacks
 
   @spec init(term) :: {:ok, state :: DirPath.t()}
-  def init(dir_reset?) do
-    self() |> send({:clear_dir, dir_reset?})
+  def init(:ok = _init_arg) do
+    self() |> send(:create_dir)
     {:ok, DirPath.new()}
   end
 
-  @spec handle_info(msg :: tuple, state :: DirPath.t()) ::
+  @spec handle_info(msg :: atom, state :: DirPath.t()) ::
           {:noreply, state :: DirPath.t()}
-  def handle_info({:clear_dir, dir_reset?}, dir_path) do
-    :ok = DirPath.clear_dir(dir_path, dir_reset?)
+  def handle_info(:create_dir, dir_path) do
+    :ok = DirPath.create_dir(dir_path)
     {:noreply, dir_path}
   end
 
