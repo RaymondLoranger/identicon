@@ -7,6 +7,7 @@ defmodule Identicon.Image.Builder do
 
   alias Identicon.Image
 
+  @typedoc "Image square index"
   @type square_index :: 0..24
 
   @squares_across get_env(:squares_across)
