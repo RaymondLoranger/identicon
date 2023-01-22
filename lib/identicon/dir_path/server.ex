@@ -9,7 +9,7 @@ defmodule Identicon.DirPath.Server do
   alias Identicon.DirPath
 
   @doc """
-  Spawns an identicon server process.
+  Spawns an identicon server process registered under the module name.
   """
   @spec start_link(term) :: GenServer.on_start()
   def start_link(:ok = _init_arg) do
