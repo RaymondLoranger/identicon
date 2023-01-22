@@ -28,6 +28,30 @@ defmodule Identicon.Log do
     """
   end
 
+  debug :image_test_1, {color, env} do
+    """
+    \nCreating 'banana' image having field color...
+    • Color: #{inspect(color) |> maybe_break(9)}
+    #{from(env, __MODULE__)}
+    """
+  end
+
+  debug :image_test_2, {indexes, env} do
+    """
+    \nCreating 'banana' image having field indexes...
+    • Indexes: #{inspect(indexes) |> maybe_break(11)}
+    #{from(env, __MODULE__)}
+    """
+  end
+
+  debug :image_test_3, {image, env} do
+    """
+    \nCreating 'banana' image...
+    • Image: #{inspect(image) |> maybe_break(9)}
+    #{from(env, __MODULE__)}
+    """
+  end
+
   ## Private functions
 
   @spec phrase([binary]) :: String.t()

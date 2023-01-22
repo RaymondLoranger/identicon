@@ -42,7 +42,7 @@ defmodule Identicon.Image.Builder do
         x = rem(index, @squares_across) * @square_size
         y = div(index, @squares_down) * @square_size
         # Corners (top-left and bottom-right) of colored squares...
-        {{x, y}, {x + @square_size, y + @square_size}}
+        {{x, y}, {x + @square_size - 1, y + @square_size - 1}}
       end)
 
     put_in(image.squares, squares)
