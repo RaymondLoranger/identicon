@@ -1,6 +1,5 @@
 defmodule Identicon.TopSup do
   use Application
-  use PersistConfig
 
   alias __MODULE__
   alias Identicon.DirPath.Server
