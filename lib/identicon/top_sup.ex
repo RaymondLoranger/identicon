@@ -4,7 +4,6 @@ defmodule Identicon.TopSup do
   alias __MODULE__
   alias Identicon.DirPath.Server
 
-  @impl Application
   @spec start(Application.start_type(), term) :: {:ok, pid}
   def start(_start_type, :ok = _start_args) do
     [
