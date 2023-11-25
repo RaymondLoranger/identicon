@@ -4,7 +4,7 @@ defmodule Identicon.MixProject do
   def project do
     [
       app: :identicon,
-      version: "0.1.25",
+      version: "0.1.26",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps()
@@ -14,7 +14,7 @@ defmodule Identicon.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:crypto, :logger],
+      extra_applications: [:logger],
       mod: {Identicon.TopSup, :ok}
     ]
   end
