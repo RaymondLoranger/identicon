@@ -7,16 +7,14 @@ defmodule Identicon.ImageTest do
   doctest Image, only: TestHelper.doctests(Image)
 
   setup_all do
-    image = %Image{
+    banana = %Image{
+      bytes: [
+        114, 179, 2, 191,  41, 122,  34, 138,
+        117, 115, 1,  35, 239, 239, 124,  65
+      ],
       color: {114, 179, 2},
       # 9 indexes of 9 colored squares
       indexes: [0, 2, 4, 7, 10, 11, 13, 14, 22],
-      bytes: [
-        114, 179,   2, 191,
-         41, 122,  34, 138,
-        117, 115,   1,  35,
-        239, 239, 124,  65
-      ],
       # 9 corner tuples of 9 colored squares
       squares: [
         {{  0,   0}, { 50 - 1,  50 - 1}},
@@ -31,36 +29,26 @@ defmodule Identicon.ImageTest do
       ]
     }
 
-    %{image: image}
+    %{image: banana}
   end
 
   describe "Image.new/1" do
     @tag :image_test_1
-    TestHelper.config_level(__MODULE__)
-
-    test "returns an image struct having field color", %{image: image} do
-      :ok = Log.debug(:image_test_1, {image.color, __ENV__})
-      assert Image.new("banana").color == image.color
+    test "returns an image struct having field color", %{image: banana} do
+      :ok = Log.debug(:assert_banana_color, {banana.color, __ENV__})
+      assert Image.new("banana").color == banana.color
     end
 
     @tag :image_test_2
-    TestHelper.config_level(__MODULE__)
-
-    test "returns an image struct having field indexes", %{image: image} do
-      :ok = Log.debug(:image_test_2, {image.indexes, __ENV__})
-      assert Image.new("banana").indexes == image.indexes
+    test "returns an image struct having field indexes", %{image: banana} do
+      Log.debug(:assert_banana_indexes, {banana.indexes, __ENV__})
+      assert Image.new("banana").indexes == banana.indexes
     end
-
-    Logger.configure(level: :all)
 
     @tag :image_test_3
-    TestHelper.config_level(__MODULE__)
-
-    test "returns an image struct", %{image: image} do
-      :ok = Log.debug(:image_test_3, {image, __ENV__})
-      assert Image.new("banana") == image
+    test "returns an image struct", %{image: banana} do
+      :ok = Log.debug(:assert_banana_struct, {banana, __ENV__})
+      assert Image.new("banana") == banana
     end
-
-    Logger.configure(level: :all)
   end
 end

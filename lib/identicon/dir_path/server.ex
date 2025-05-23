@@ -12,14 +12,14 @@ defmodule Identicon.DirPath.Server do
   Spawns an identicon server process registered under the module name.
   """
   @spec start_link(term) :: GenServer.on_start()
-  def start_link(:ok = _init_arg) do
+  def start_link(_init_arg = :ok) do
     GenServer.start_link(Server, :ok, name: Server)
   end
 
   ## Callbacks
 
   @spec init(term) :: {:ok, state :: DirPath.t()}
-  def init(:ok = _init_arg) do
+  def init(_init_arg = :ok) do
     self() |> send(:create_dir)
     {:ok, DirPath.new()}
   end

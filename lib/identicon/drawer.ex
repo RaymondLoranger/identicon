@@ -20,11 +20,11 @@ defmodule Identicon.Drawer do
   """
   @spec render(Image.t()) :: Identicon.t()
   def render(%Image{color: color, squares: squares} = _image) do
-    # NOTE: An egd (Erlang graphical drawer) image is a mutable object.
     image = :egd.create(@image_width, @image_height)
     fill = :egd.color(color)
 
     Enum.each(squares, fn {top_left, bottom_right} ->
+      # NOTE: An egd (Erlang graphical drawer) image is a mutable object.
       :ok = :egd.filledRectangle(image, top_left, bottom_right, fill)
     end)
 

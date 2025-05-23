@@ -1,6 +1,6 @@
 defmodule Identicon.Image.Builder do
   @moduledoc """
-  Updates the last fields of an image struct.
+  Updates fields `indexes` and `squares` of an image struct.
   """
 
   use PersistConfig

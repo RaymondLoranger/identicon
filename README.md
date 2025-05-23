@@ -23,16 +23,13 @@ From the "identicon" folder, start the interactive shell:
 
 #### Example 2
 
-To run the API from a remote shell, start the interactive shell like so:
+To run the API in a remote shell, start an interactive shell like so:
 
   - cd identicon
   - iex --sname foo -S mix
 
-Then from a different console, start the Erlang's Windows Shell:
+Then from another interactive shell:
 
-  - iex --sname bar --remsh foo --werl
-
-And in the Erlang shell, run the API:
-
+  - iex --sname bar --remsh foo
   - Identicon.show("orange") # Writes to and opens file "orange.png".
 

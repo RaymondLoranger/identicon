@@ -14,7 +14,7 @@ defmodule Identicon.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :crypto],
+      extra_applications: [:crypto, :logger],
       mod: {Identicon.TopSup, :ok}
     ]
   end
@@ -23,7 +23,9 @@ defmodule Identicon.MixProject do
   defp deps do
     [
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
-      {:egd, github: "erlang/egd"},
+      # See link below for an explanation of this github replacement...
+      # {:egd, github: "erlang/egd"},
+      {:egd, github: "RaymondLoranger/egd"},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:file_only_logger, "~> 0.2"},
       {:log_reset, "~> 0.1"},
@@ -31,3 +33,5 @@ defmodule Identicon.MixProject do
     ]
   end
 end
+
+# https://elixirforum.com/t/error-when-rendring-in-egd-undefinedfunctionerror-function-zlib-crc32-2-is-undefined-or-private/66639

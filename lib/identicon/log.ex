@@ -1,11 +1,14 @@
 defmodule Identicon.Log do
   use File.Only.Logger
 
-  info :dir_cleared, {dir_path, removed_files_and_dirs, env} do
+  info :dir_cleared, {dir, files_and_dirs, env} do
     """
     \nIdenticon directory cleared successfully...
-    • Directory: #{inspect(dir_path) |> maybe_break(13)}
-    • Removed: #{phrase(removed_files_and_dirs) |> maybe_break(11)}
+    • Directory: #{inspect(dir) |> maybe_break(13)}
+    • Removed: #{phrase(files_and_dirs) |> maybe_break(11)}
+    • Files and/or subdirectories: #{for file <- files_and_dirs, file != dir do
+      "\n  #{String.replace(file, dir, "...") |> inspect()}"
+    end}
     #{from(env, __MODULE__)}\
     """
   end
@@ -28,25 +31,25 @@ defmodule Identicon.Log do
     """
   end
 
-  debug :image_test_1, {color, env} do
+  debug :assert_banana_color, {color, env} do
     """
-    \nCreating 'banana' image having field color...
+    \nAsserting 'banana' is an image struct having field color...
     • Color: #{inspect(color) |> maybe_break(9)}
     #{from(env, __MODULE__)}\
     """
   end
 
-  debug :image_test_2, {indexes, env} do
+  debug :assert_banana_indexes, {indexes, env} do
     """
-    \nCreating 'banana' image having field indexes...
+    \nAsserting 'banana' is an image struct having field indexes...
     • Indexes: #{inspect(indexes) |> maybe_break(11)}
     #{from(env, __MODULE__)}\
     """
   end
 
-  debug :image_test_3, {image, env} do
+  debug :assert_banana_struct, {image, env} do
     """
-    \nCreating 'banana' image...
+    \nAsserting 'banana' is an image struct...
     • Image: #{inspect(image) |> maybe_break(9)}
     #{from(env, __MODULE__)}\
     """
@@ -56,14 +59,14 @@ defmodule Identicon.Log do
 
   @spec phrase([binary]) :: String.t()
   defp phrase(files_and_dirs) when length(files_and_dirs) in [0, 1] do
-    "0 files or directories"
+    "0 files and/or subdirectories"
   end
 
   defp phrase(files_and_dirs) when length(files_and_dirs) == 2 do
-    "1 file or directory"
+    "1 file and/or subdirectory"
   end
 
   defp phrase(files_and_dirs) do
-    "#{length(files_and_dirs) - 1} files or directories"
+    "#{length(files_and_dirs) - 1} files and/or subdirectories"
   end
 end

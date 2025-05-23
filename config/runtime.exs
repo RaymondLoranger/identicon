@@ -2,7 +2,7 @@ import Config
 
 {open_with, sep} =
   case :os.type() do
-    {:win32, _} -> {"mspaint", "\\"}
+    {:win32, :nt} -> {"mspaint", "\\"}
     {:unix, _} -> {"open", "/"}
   end
 
