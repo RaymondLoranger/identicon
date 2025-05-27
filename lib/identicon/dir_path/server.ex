@@ -20,28 +20,32 @@ defmodule Identicon.DirPath.Server do
 
   @spec init(term) :: {:ok, state :: DirPath.t()}
   def init(_init_arg = :ok) do
-    self() |> send(:create_dir)
     {:ok, DirPath.new()}
   end
 
-  @spec handle_info(msg :: atom, state :: DirPath.t()) ::
+  @spec handle_info(msg :: term, state :: DirPath.t()) ::
           {:noreply, state :: DirPath.t()}
-  def handle_info(:create_dir, dir_path) do
-    :ok = DirPath.create_dir(dir_path)
+  def handle_info(_message, dir_path), do: {:noreply, dir_path}
+
+  @spec handle_call(request :: atom, GenServer.from(), state :: DirPath.t()) ::
+          {:reply, reply :: DirPath.t(), state :: DirPath.t()}
+  def handle_call(:get_dir, _from, dir_path) do
+    {:reply, dir_path, dir_path}
+  end
+
+  @spec handle_cast(request :: tuple | atom, state :: DirPath.t()) ::
+          {:noreply, state :: DirPath.t()}
+  def handle_cast({:dir_path, new_dir_path}, dir_path) do
+    {:noreply, DirPath.change_dir(dir_path, new_dir_path)}
+  end
+
+  def handle_cast({:show, input}, dir_path) do
+    :ok = DirPath.show(dir_path, input)
     {:noreply, dir_path}
   end
 
-  def handle_info(_message, dir_path), do: {:noreply, dir_path}
-
-  @spec handle_call(request :: atom | tuple, GenServer.from(), DirPath.t()) ::
-          {:reply, reply :: term, state :: DirPath.t()}
-  def handle_call(:clear_dir, _from, dir_path) do
+  def handle_cast(:clear_dir, dir_path) do
     :ok = DirPath.clear_dir(dir_path)
-    {:reply, :ok, dir_path}
-  end
-
-  def handle_call({:show, input}, _from, dir_path) do
-    :ok = DirPath.show(dir_path, input)
-    {:reply, :ok, dir_path}
+    {:noreply, dir_path}
   end
 end

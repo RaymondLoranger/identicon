@@ -1,16 +1,43 @@
 defmodule Identicon.Log do
   use File.Only.Logger
 
-  info :dir_cleared, {dir, files_and_dirs, env} do
+  require Logger
+
+  info :files_found, {dir, files, env} do
     """
-    \nIdenticon directory cleared successfully...
+    \nFound #{phrase(files)} to be deleted...
     • Directory: #{inspect(dir) |> maybe_break(13)}
-    • Removed: #{phrase(files_and_dirs) |> maybe_break(11)}
-    • Files and/or subdirectories: #{for file <- files_and_dirs, file != dir do
-      "\n  #{String.replace(file, dir, "...") |> inspect()}"
+    • Files: #{for file <- files do
+      "\n  #{String.replace_leading(file, dir, "...") |> inspect()}"
     end}
     #{from(env, __MODULE__)}\
     """
+  end
+
+  info :dir_changed, {from, to, env} do
+    """
+    \nIdenticon directory changed...
+    • From: #{inspect(from) |> maybe_break(8)}
+    • To: #{inspect(to) |> maybe_break(6)}
+    #{from(env, __MODULE__)}\
+    """
+  end
+
+  info :file_deleted, {file, dir, env} do
+    """
+    \nFile "#{file}" successfully deleted...
+    • Directory: #{inspect(dir) |> maybe_break(13)}
+    #{from(env, __MODULE__)}\
+    """
+  end
+
+  def error(:file_not_deleted, {file, dir, reason, env}) do
+    Logger.error("""
+    \nFile "#{file}" not deleted...
+    • Directory: #{inspect(dir) |> maybe_break(13)}
+    • Reason: #{"'#{:file.format_error(reason)}'" |> maybe_break(10)}
+    #{from(env, __MODULE__)}\
+    """)
   end
 
   info :identicon_shown, {input, dir_path, open_with, env} do
@@ -22,13 +49,13 @@ defmodule Identicon.Log do
     """
   end
 
-  error :cannot_write, {input, dir_path, reason, env} do
-    """
+  def error(:cannot_write, {input, dir_path, reason, env}) do
+    Logger.error("""
     \nCannot write identicon into file "#{input}.png"...
     • Directory: #{inspect(dir_path) |> maybe_break(13)}
-    • Reason: #{:file.format_error(reason) |> inspect() |> maybe_break(10)}
+    • Reason: #{"'#{:file.format_error(reason)}'" |> maybe_break(10)}
     #{from(env, __MODULE__)}\
-    """
+    """)
   end
 
   debug :assert_banana_color, {color, env} do
@@ -58,15 +85,11 @@ defmodule Identicon.Log do
   ## Private functions
 
   @spec phrase([binary]) :: String.t()
-  defp phrase(files_and_dirs) when length(files_and_dirs) in [0, 1] do
-    "0 files and/or subdirectories"
+  defp phrase(files) when length(files) == 1 do
+    "1 file"
   end
 
-  defp phrase(files_and_dirs) when length(files_and_dirs) == 2 do
-    "1 file and/or subdirectory"
-  end
-
-  defp phrase(files_and_dirs) do
-    "#{length(files_and_dirs) - 1} files and/or subdirectories"
+  defp phrase(files) do
+    "#{length(files)} files"
   end
 end

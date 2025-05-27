@@ -20,15 +20,30 @@ defmodule Identicon do
   ## Examples
 
       iex> Identicon.show("guava") # Writes to and opens file "guava.png".
+      iex> {:ok, timeout} = :application.get_env(:identicon, :show_timeout)
+      iex> Process.sleep(timeout)
       :ok
   """
   @spec show(String.t()) :: :ok
   def show(input) when is_binary(input) do
-    :ok = GenServer.call(Server, {:show, input})
+    :ok = GenServer.cast(Server, {:show, input})
   end
 
   @doc """
-  Clears the configured identicon directory.
+  Returns the current identicon directory.
+
+  ## Examples
+
+      iex> Identicon.get_dir() |> String.ends_with?("assets/identicons")
+      true
+  """
+  @spec get_dir :: :ok
+  def get_dir do
+    GenServer.call(Server, :get_dir)
+  end
+
+  @doc """
+  Clears the current identicon directory.
 
   ## Examples
 
@@ -37,6 +52,19 @@ defmodule Identicon do
   """
   @spec clear_dir :: :ok
   def clear_dir do
-    :ok = GenServer.call(Server, :clear_dir)
+    :ok = GenServer.cast(Server, :clear_dir)
+  end
+
+  @doc """
+  Changes the current identicon directory to `dir_path` (should exist).
+
+  ## Examples
+
+      iex> Identicon.change_dir("C:/Users/Ray/Desktop")
+      iex> Identicon.get_dir()
+      "c:/Users/Ray/Desktop"
+  """
+  def change_dir(dir_path) do
+    :ok = GenServer.cast(Server, {:dir_path, dir_path})
   end
 end
