@@ -12,6 +12,7 @@ defmodule TestHelper do
   end
 
   # Prevents logging at compile time when called after excluded @tag...
+  # Not used in this application. See package MapSorter for examples...
   @spec config_level(module) :: :ok | nil
   def config_level(module) when is_atom(module) do
     [tag | _] = Module.get_attribute(module, :tag)

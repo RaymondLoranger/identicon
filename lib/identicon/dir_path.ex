@@ -1,12 +1,10 @@
 defmodule Identicon.DirPath do
   @moduledoc """
-  Clears or creates an identicon directory (configured or ad hoc).
+  Clears or changes the identicon directory (configured or ad hoc).
   Also populates a PNG file with an identicon and opens that file.
   """
 
   use PersistConfig
-
-  require Logger
 
   alias Identicon.{Drawer, Image, Log}
 
@@ -82,10 +80,10 @@ defmodule Identicon.DirPath do
 
   ## Private functions
 
-  @spec open_with :: String.t()
+  @spec open_with :: binary
   defp open_with, do: get_env(:open_with)
 
-  @spec sep :: String.t()
+  @spec sep :: binary
   defp sep, do: get_env(:sep)
 
   @spec close_cmd :: charlist

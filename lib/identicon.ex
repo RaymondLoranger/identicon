@@ -43,7 +43,7 @@ defmodule Identicon do
   end
 
   @doc """
-  Clears the current identicon directory.
+  Clears the current identicon directory (deletes all PNG files).
 
   ## Examples
 

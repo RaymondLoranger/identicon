@@ -50,8 +50,8 @@ defmodule Identicon.Image.Builder do
 
   ## Private functions
 
-  @spec mirror_row([byte]) :: [byte]
-  defp mirror_row([first, second, _third] = row), do: row ++ [second, first]
+  @spec mirror_row([byte]) :: [[byte] | byte]
+  defp mirror_row([first, second, _third] = row), do: [row | [second, first]]
 
   @spec even_byte_indexes([{byte, square_index}]) :: [square_index]
   defp even_byte_indexes(tuples) do

@@ -23,17 +23,17 @@ defmodule Identicon.Log do
     """
   end
 
-  info :file_deleted, {file, dir, env} do
+  info :file_deleted, {base, dir, env} do
     """
-    \nFile "#{file}" successfully deleted...
+    \nFile "#{base}" successfully deleted...
     • Directory: #{inspect(dir) |> maybe_break(13)}
     #{from(env, __MODULE__)}\
     """
   end
 
-  def error(:file_not_deleted, {file, dir, reason, env}) do
+  def error(:file_not_deleted, {base, dir, reason, env}) do
     Logger.error("""
-    \nFile "#{file}" not deleted...
+    \nFile "#{base}" not deleted...
     • Directory: #{inspect(dir) |> maybe_break(13)}
     • Reason: #{"'#{:file.format_error(reason)}'" |> maybe_break(10)}
     #{from(env, __MODULE__)}\
