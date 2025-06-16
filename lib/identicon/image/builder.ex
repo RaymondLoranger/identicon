@@ -8,22 +8,23 @@ defmodule Identicon.Image.Builder do
   alias Identicon.Image
 
   @typedoc "Image square index"
-  @type square_index :: 0..24
-
-  @squares_across get_env(:squares_across)
-  @squares_down get_env(:squares_down)
-  @square_size get_env(:square_size)
+  @type square_index :: non_neg_integer
 
   @doc """
   Updates field `indexes` of image struct `image`.
   """
   @spec derive_indexes(Image.t()) :: Image.t()
-  def derive_indexes(%Image{bytes: bytes} = image) do
+  def derive_indexes(
+        %Image{
+          dimension: dimension,
+          chunk_size: chunk_size,
+          bytes: bytes
+        } = image
+      ) do
     indexes =
       bytes
-      # 16 bytes => 5 chunks of 3 bytes discarding the 16th byte...
-      |> Enum.chunk_every(3, 3, :discard)
-      |> Enum.map(&mirror_row/1)
+      |> Enum.chunk_every(chunk_size)
+      |> Enum.map(&mirror_chunk(&1, dimension))
       |> List.flatten()
       |> Enum.with_index()
       |> even_byte_indexes()
@@ -36,13 +37,19 @@ defmodule Identicon.Image.Builder do
   Updates field `squares` of image struct `image`.
   """
   @spec derive_squares(Image.t()) :: Image.t()
-  def derive_squares(%Image{indexes: indexes} = image) do
+  def derive_squares(
+        %Image{
+          dimension: dimension,
+          square_size: square_size,
+          indexes: indexes
+        } = image
+      ) do
     squares =
       Enum.map(indexes, fn index ->
-        x = rem(index, @squares_across) * @square_size
-        y = div(index, @squares_down) * @square_size
+        x = rem(index, dimension) * square_size
+        y = div(index, dimension) * square_size
         # Corners (top-left and bottom-right) of colored squares...
-        {{x, y}, {x + @square_size - 1, y + @square_size - 1}}
+        {{x, y}, {x + square_size - 1, y + square_size - 1}}
       end)
 
     put_in(image.squares, squares)
@@ -50,8 +57,14 @@ defmodule Identicon.Image.Builder do
 
   ## Private functions
 
-  @spec mirror_row([byte]) :: [[byte] | byte]
-  defp mirror_row([first, second, _third] = row), do: [row | [second, first]]
+  @spec mirror_chunk([byte], pos_integer) :: [[byte] | byte]
+  defp mirror_chunk(chunk, dimension) when rem(dimension, 2) == 0,
+    # E.g. for dimension 8 => [[1, 2, 3, 4], 4, 3, 2, 1]
+    do: [chunk | Enum.reverse(chunk)]
+
+  defp mirror_chunk(chunk, _dimension),
+    # E.g. for dimension 7 => [[1, 2, 3, 4], 3, 2, 1]
+    do: [chunk | Enum.drop(chunk, -1) |> Enum.reverse()]
 
   @spec even_byte_indexes([{byte, square_index}]) :: [square_index]
   defp even_byte_indexes(tuples) do

@@ -3,25 +3,24 @@ defmodule Identicon.Drawer do
   Converts an image struct into an identicon.
   """
 
-  use PersistConfig
-
   alias Identicon
   alias Identicon.Image
-
-  @squares_across get_env(:squares_across)
-  @squares_down get_env(:squares_down)
-  @square_size get_env(:square_size)
-
-  @image_height @square_size * @squares_down
-  @image_width @square_size * @squares_across
 
   @doc """
   Converts image struct `image` into an identicon.
   """
   @spec render(Image.t()) :: Identicon.t()
-  def render(%Image{color: color, squares: squares} = _image) do
+  def render(
+        %Image{
+          dimension: dimension,
+          square_size: square_size,
+          color: color,
+          squares: squares
+        } = _image
+      ) do
+    area_width = area_height = square_size * dimension
     # Creates an image area and returns its reference (pid).
-    egd_image = :egd.create(@image_width, @image_height)
+    egd_image = :egd.create(area_width, area_height)
     fill_color = :egd.color(color)
 
     Enum.each(squares, fn {top_left, bottom_right} ->

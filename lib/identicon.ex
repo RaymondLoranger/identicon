@@ -4,18 +4,26 @@
 # └────────────────────────────────────────────────────────────────┘
 defmodule Identicon do
   @moduledoc """
-  Opens a PNG file populated with an identicon derived from an input string.
+  Opens a PNG file populated with an identicon derived from an input string and
+  a dimension (number of squares across or down).
 
   ##### Based on the course [The Complete Elixir and Phoenix Bootcamp](https://www.udemy.com/the-complete-elixir-and-phoenix-bootcamp-and-tutorial/) by Stephen Grider.
   """
 
+  use PersistConfig
+
+  alias __MODULE__.DirPath
   alias __MODULE__.DirPath.Server
+
+  @default_dimension get_env(:default_dimension)
+  @valid_dimensions get_env(:valid_dimensions)
 
   @typedoc "Identicon"
   @type t :: binary
 
   @doc """
-  Opens a PNG file populated with an identicon derived from `input`.
+  Opens a PNG file populated with an identicon derived from `input` and
+  `dimension`.
 
   ## Examples
 
@@ -24,9 +32,10 @@ defmodule Identicon do
       iex> Process.sleep(timeout)
       :ok
   """
-  @spec show(String.t()) :: :ok
-  def show(input) when is_binary(input) do
-    :ok = GenServer.cast(Server, {:show, input})
+  @spec show(String.t(), pos_integer) :: :ok
+  def show(input, dimension \\ @default_dimension)
+      when is_binary(input) and dimension in @valid_dimensions do
+    :ok = GenServer.cast(Server, {:show, input, dimension})
   end
 
   @doc """
@@ -37,7 +46,7 @@ defmodule Identicon do
       iex> Identicon.get_dir() |> String.ends_with?("assets/identicons")
       true
   """
-  @spec get_dir :: :ok
+  @spec get_dir :: DirPath.t()
   def get_dir do
     GenServer.call(Server, :get_dir)
   end
@@ -64,6 +73,7 @@ defmodule Identicon do
       iex> Identicon.get_dir()
       "c:/Users/Ray/Desktop"
   """
+  @spec change_dir(DirPath.t()) :: :ok
   def change_dir(dir_path) do
     :ok = GenServer.cast(Server, {:dir_path, dir_path})
   end

@@ -8,9 +8,18 @@ defmodule Identicon.ImageTest do
 
   setup_all do
     banana = %Image{
+      input: "banana",
+      dimension: 5,
+      chunk_size: 3,
+      square_size: 50,
+      bytes_length: 15,
+      # 5 chunks of 3 squares...
       bytes: [
-        114, 179, 2, 191,  41, 122,  34, 138,
-        117, 115, 1,  35, 239, 239, 124,  65
+        114, 179,   2,
+        191,  41, 122,
+         34, 138, 117,
+        115,   1,  35,
+        239, 239, 124
       ],
       color: {114, 179, 2},
       # 9 indexes of 9 colored squares
@@ -36,19 +45,19 @@ defmodule Identicon.ImageTest do
     @tag :image_test_1
     test "returns an image struct having field color", %{image: banana} do
       :ok = Log.debug(:assert_banana_color, {banana.color, __ENV__})
-      assert Image.new("banana").color == banana.color
+      assert Image.new(banana.input, banana.dimension).color == banana.color
     end
 
     @tag :image_test_2
     test "returns an image struct having field indexes", %{image: banana} do
       Log.debug(:assert_banana_indexes, {banana.indexes, __ENV__})
-      assert Image.new("banana").indexes == banana.indexes
+      assert Image.new(banana.input, banana.dimension).indexes == banana.indexes
     end
 
     @tag :image_test_3
     test "returns an image struct", %{image: banana} do
       :ok = Log.debug(:assert_banana_struct, {banana, __ENV__})
-      assert Image.new("banana") == banana
+      assert Image.new(banana.input, banana.dimension) == banana
     end
   end
 end

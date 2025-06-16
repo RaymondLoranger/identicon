@@ -39,8 +39,8 @@ defmodule Identicon.DirPath.Server do
     {:noreply, DirPath.change_dir(dir_path, new_dir_path)}
   end
 
-  def handle_cast({:show, input}, dir_path) do
-    :ok = DirPath.show(dir_path, input)
+  def handle_cast({:show, input, dimension}, dir_path) do
+    :ok = DirPath.show(dir_path, input, dimension)
     {:noreply, dir_path}
   end
 

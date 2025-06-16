@@ -29,17 +29,22 @@ defmodule Identicon.DirPath do
   @doc """
   Populates a PNG file with an identicon and opens that file.
   """
-  @spec show(t, String.t()) :: :ok
-  def show(dir_path, input) do
-    file_path = "#{dir_path}/#{input}.png" |> String.replace("/", sep())
+  @spec show(t, String.t(), pos_integer) :: :ok
+  def show(dir_path, input, dimension) do
+    base_name = "#{input} #{dimension}x#{dimension}.png"
+    file_path = "#{dir_path}/#{base_name}" |> String.replace("/", sep())
     open_with = open_with()
     close_cmd = close_cmd()
-    identicon = Image.new(input) |> Drawer.render()
+    identicon = Image.new(input, dimension) |> Drawer.render()
 
     with :ok <- File.write(file_path, identicon),
          _pid = spawn(fn -> open(open_with, file_path) end),
          _pid = spawn(fn -> close(close_cmd, @timeout) end) do
-      :ok = Log.info(:identicon_shown, {input, dir_path, open_with, __ENV__})
+      :ok =
+        Log.info(
+          :identicon_shown,
+          {input, dir_path, open_with, @timeout, __ENV__}
+        )
     else
       {:error, reason} ->
         :ok = Log.error(:cannot_write, {input, dir_path, reason, __ENV__})

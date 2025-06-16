@@ -1,7 +1,7 @@
 import Config
 
 config :identicon, default_dir_path: "./assets/identicons/"
-config :identicon, squares_across: 5
-config :identicon, squares_down: 5
-config :identicon, square_size: 50 # pixels
+config :identicon, default_dimension: 5 # squares across or down
+config :identicon, valid_dimensions: 4..10
+config :identicon, side_length: 250 # pixels
 config :identicon, show_timeout: 3000 # ms

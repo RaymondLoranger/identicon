@@ -40,9 +40,9 @@ defmodule Identicon.Log do
     """)
   end
 
-  info :identicon_shown, {input, dir_path, open_with, env} do
+  info :identicon_shown, {input, dir_path, open_with, timeout, env} do
     """
-    \nIdenticon in file "#{input}.png" shown successfully...
+    \nIdenticon in file "#{input}.png" shown successfully for #{timeout} ms...
     • Directory: #{inspect(dir_path) |> maybe_break(13)}
     • Command: #{open_with}...
     #{from(env, __MODULE__)}\
