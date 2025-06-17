@@ -3,8 +3,8 @@ defmodule Identicon.Image do
   Creates an image struct to be converted into an identicon.
 
   The image struct contains the fields `input`, `dimension`, `chunk_size`,
-  `square_size`, `bytes_length`, `bytes`, `color`, `indexes` and `squares`
-  representing the properties of an identicon image.
+  `square_size`, `bytes_length`, `hash_algo`, `bytes`, `color`, `indexes` and
+  `squares` representing the properties of an identicon image.
   """
 
   use PersistConfig
@@ -21,6 +21,7 @@ defmodule Identicon.Image do
             chunk_size: 3,
             square_size: round(250 / 5),
             bytes_length: 3 * 5,
+            hash_algo: :md5,
             bytes: [],
             color: {},
             indexes: [],
@@ -37,6 +38,7 @@ defmodule Identicon.Image do
           # Size of each square in pixels...
           square_size: pos_integer,
           bytes_length: pos_integer,
+          hash_algo: atom,
           # Digest bytes...
           bytes: [byte],
           color: tuple,
@@ -55,6 +57,7 @@ defmodule Identicon.Image do
     |> set_chunk_size()
     |> set_square_size()
     |> set_bytes_length()
+    |> set_hash_algo()
     |> set_bytes()
     |> set_color()
     |> Builder.derive_indexes()
@@ -76,6 +79,37 @@ defmodule Identicon.Image do
   @spec set_bytes_length(t) :: t
   defp set_bytes_length(%Image{dimension: dim, chunk_size: chunk_size} = img) do
     put_in(img.bytes_length, chunk_size * dim)
+  end
+
+  @spec set_hash_algo(t) :: t
+  defp set_hash_algo(%Image{dimension: 5, bytes_length: 15} = image) do
+    # :md5 always returns 16 bytes...
+    put_in(image.hash_algo, :md5)
+  end
+
+  defp set_hash_algo(%Image{dimension: 6, bytes_length: 18} = image) do
+    # :sha always returns 20 bytes...
+    put_in(image.hash_algo, :sha)
+  end
+
+  defp set_hash_algo(%Image{dimension: 7, bytes_length: 28} = image) do
+    # :sha224 always returns 28 bytes...
+    put_in(image.hash_algo, :sha224)
+  end
+
+  defp set_hash_algo(%Image{dimension: 8, bytes_length: 32} = image) do
+    # :sha256 always returns 32 bytes...
+    put_in(image.hash_algo, :sha256)
+  end
+
+  defp set_hash_algo(%Image{dimension: 9, bytes_length: 45} = image) do
+    # :sha384 always returns 48 bytes...
+    put_in(image.hash_algo, :sha384)
+  end
+
+  defp set_hash_algo(%Image{dimension: 10, bytes_length: 50} = image) do
+    # :sha512 always returns 64 bytes...
+    put_in(image.hash_algo, :sha512)
   end
 
   @spec set_bytes(t) :: t

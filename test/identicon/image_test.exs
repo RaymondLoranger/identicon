@@ -14,6 +14,7 @@ defmodule Identicon.ImageTest do
       square_size: 50,
       bytes_length: 15,
       # 5 chunks of 3 squares...
+      hash_algo: :md5,
       bytes: [
         114, 179,   2,
         191,  41, 122,
