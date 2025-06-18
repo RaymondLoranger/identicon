@@ -3,6 +3,7 @@ defmodule Identicon.ImageTest do
 
   alias Identicon.{Image, Log}
 
+  # Image has no doctests...
   doctest Image
   doctest Image, only: TestHelper.doctests(Image)
 
@@ -13,7 +14,7 @@ defmodule Identicon.ImageTest do
       chunk_size: 3,
       square_size: 50,
       bytes_length: 15,
-      # 5 chunks of 3 squares...
+      # 5 chunks of 3 bytes...
       hash_algo: :md5,
       bytes: [
         114, 179,   2,
@@ -23,6 +24,7 @@ defmodule Identicon.ImageTest do
         239, 239, 124
       ],
       color: {114, 179, 2},
+      background: {141, 76, 253},
       # 9 indexes of 9 colored squares
       indexes: [0, 2, 4, 7, 10, 11, 13, 14, 22],
       # 9 corner tuples of 9 colored squares

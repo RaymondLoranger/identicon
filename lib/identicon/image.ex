@@ -3,17 +3,14 @@ defmodule Identicon.Image do
   Creates an image struct to be converted into an identicon.
 
   The image struct contains the fields `input`, `dimension`, `chunk_size`,
-  `square_size`, `bytes_length`, `hash_algo`, `bytes`, `color`, `indexes` and
-  `squares` representing the properties of an identicon image.
+  `square_size`, `bytes_length`, `hash_algo`, `bytes`, `color`, `background`,
+  `indexes` and `squares` representing the properties of an identicon image.
   """
 
   use PersistConfig
 
   alias __MODULE__
   alias __MODULE__.Builder
-
-  # Identicon side length in pixels...
-  @side_length get_env(:side_length)
 
   @enforce_keys [:input, :dimension]
   defstruct input: "",
@@ -24,6 +21,7 @@ defmodule Identicon.Image do
             hash_algo: :md5,
             bytes: [],
             color: {},
+            background: {},
             indexes: [],
             squares: []
 
@@ -42,6 +40,7 @@ defmodule Identicon.Image do
           # Digest bytes...
           bytes: [byte],
           color: tuple,
+          background: tuple,
           # Indexes of colored squares...
           indexes: [Builder.square_index()],
           # Corners (top-left and bottom-right) of colored squares...
@@ -60,6 +59,7 @@ defmodule Identicon.Image do
     |> set_hash_algo()
     |> set_bytes()
     |> set_color()
+    |> set_background()
     |> Builder.derive_indexes()
     |> Builder.derive_squares()
   end
@@ -73,7 +73,7 @@ defmodule Identicon.Image do
 
   @spec set_square_size(t) :: t
   defp set_square_size(%Image{dimension: dimension} = image) do
-    put_in(image.square_size, round(@side_length / dimension))
+    put_in(image.square_size, round(side_length() / dimension))
   end
 
   @spec set_bytes_length(t) :: t
@@ -113,16 +113,14 @@ defmodule Identicon.Image do
   end
 
   @spec set_bytes(t) :: t
-  defp set_bytes(%Image{input: input, bytes_length: bytes_length} = image)
-       when bytes_length <= 15 do
-    # Always returns 16 bytes...
-    bytes = :crypto.hash(:md5, input) |> :binary.bin_to_list()
-    put_in(image.bytes, Enum.take(bytes, bytes_length))
-  end
-
-  defp set_bytes(%Image{input: input, bytes_length: bytes_length} = image) do
-    # Always returns 64 bytes...
-    bytes = :crypto.hash(:sha512, input) |> :binary.bin_to_list()
+  defp set_bytes(
+         %Image{
+           input: input,
+           bytes_length: bytes_length,
+           hash_algo: hash_algo
+         } = image
+       ) do
+    bytes = :crypto.hash(hash_algo, input) |> :binary.bin_to_list()
     put_in(image.bytes, Enum.take(bytes, bytes_length))
   end
 
@@ -130,4 +128,14 @@ defmodule Identicon.Image do
   defp set_color(%Image{bytes: [r, g, b | _tail]} = image) do
     put_in(image.color, {r, g, b})
   end
+
+  @spec set_background(t) :: t
+  defp set_background(%Image{color: {r, g, b}} = image) do
+    # Find the complementary color...
+    put_in(image.background, {255 - r, 255 - g, 255 - b})
+  end
+
+  # Identicon side length in pixels...
+  @spec side_length :: pos_integer
+  defp side_length, do: get_env(:side_length)
 end

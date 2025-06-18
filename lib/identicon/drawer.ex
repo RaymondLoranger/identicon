@@ -15,12 +15,23 @@ defmodule Identicon.Drawer do
           dimension: dimension,
           square_size: square_size,
           color: color,
+          background: background,
           squares: squares
         } = _image
       ) do
     area_width = area_height = square_size * dimension
     # Creates an image area and returns its reference (pid).
     egd_image = :egd.create(area_width, area_height)
+    background = :egd.color(background)
+
+    :ok =
+      :egd.filledRectangle(
+        egd_image,
+        {0, 0},
+        {area_width, area_height},
+        background
+      )
+
     fill_color = :egd.color(color)
 
     Enum.each(squares, fn {top_left, bottom_right} ->

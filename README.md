@@ -22,8 +22,8 @@ From the "identicon" folder, start the interactive shell:
   - iex -S mix
   - Identicon.show("fig") # Writes to file "fig 5x5.png" and opens it.
   ![alt text](<assets/images/fig 5x5.png>)
-  - Identicon.show("guava", 7) # Writes to file "guava 7x7.png" and opens it.
-  ![alt text](<assets/images/guava 7x7.png>)
+  - Identicon.show("kiwi", 7) # Writes to file "kiwi 7x7.png" and opens it.
+  ![alt text](<assets/images/kiwi 7x7.png>)
 #### Example 2
 
 To run the API in a remote shell, start an interactive shell like so:
@@ -34,5 +34,5 @@ To run the API in a remote shell, start an interactive shell like so:
 Then from another interactive shell:
 
   - iex --sname bar --remsh foo
-  - Identicon.show("orange") # Writes to and opens file "orange.png".
+  - Identicon.show("orange") # Writes to file "orange 5x5.png" and opens it.
 

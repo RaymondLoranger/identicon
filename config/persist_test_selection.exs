@@ -5,7 +5,7 @@ config :identicon,
   doctests: %{
     Identicon => [
       get_dir: 0,
-      # show: 1,
+      # show: 2,
       # clear_dir: 0,
       # change_dir: 1,
     ],

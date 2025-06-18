@@ -12,7 +12,7 @@ defmodule Identicon do
 
   use PersistConfig
 
-  alias __MODULE__.DirPath
+  alias __MODULE__.{DirPath, Log}
   alias __MODULE__.DirPath.Server
 
   @default_dimension get_env(:default_dimension)
@@ -27,15 +27,21 @@ defmodule Identicon do
 
   ## Examples
 
-      iex> Identicon.show("guava") # Writes to and opens file "guava.png".
+      iex> Identicon.show("fig") # Writes to file "fig 5x5.png" and opens it.
       iex> {:ok, timeout} = :application.get_env(:identicon, :show_timeout)
-      iex> Process.sleep(timeout)
+      iex> Process.sleep(timeout + 1000)
       :ok
   """
   @spec show(String.t(), pos_integer) :: :ok
   def show(input, dimension \\ @default_dimension)
+
+  def show(input, dimension)
       when is_binary(input) and dimension in @valid_dimensions do
     :ok = GenServer.cast(Server, {:show, input, dimension})
+  end
+
+  def show(input, dimension) do
+    :ok = Log.error(:invalid_args, {input, dimension, __ENV__})
   end
 
   @doc """

@@ -9,7 +9,6 @@ defmodule Identicon.DirPath do
   alias Identicon.{Drawer, Image, Log}
 
   @default_dir_path get_env(:default_dir_path)
-  @timeout get_env(:show_timeout)
 
   @typedoc "Identicon directory path"
   @type t :: Path.t()
@@ -35,15 +34,16 @@ defmodule Identicon.DirPath do
     file_path = "#{dir_path}/#{base_name}" |> String.replace("/", sep())
     open_with = open_with()
     close_cmd = close_cmd()
+    show_timeout = show_timeout()
     identicon = Image.new(input, dimension) |> Drawer.render()
 
     with :ok <- File.write(file_path, identicon),
          _pid = spawn(fn -> open(open_with, file_path) end),
-         _pid = spawn(fn -> close(close_cmd, @timeout) end) do
+         _pid = spawn(fn -> close(close_cmd, show_timeout) end) do
       :ok =
         Log.info(
           :identicon_shown,
-          {input, dir_path, open_with, @timeout, __ENV__}
+          {input, dir_path, open_with, show_timeout, __ENV__}
         )
     else
       {:error, reason} ->
@@ -93,6 +93,9 @@ defmodule Identicon.DirPath do
 
   @spec close_cmd :: charlist
   defp close_cmd, do: get_env(:close_cmd)
+
+  @spec show_timeout :: pos_integer
+  defp show_timeout, do: get_env(:show_timeout)
 
   @spec open(binary, binary) :: charlist
   defp open(open_with, file_path) do
