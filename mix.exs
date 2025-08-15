@@ -1,4 +1,6 @@
 defmodule Identicon.MixProject do
+  # NOTE: Only compiles with Erlang/OTP 26 [erts-14.2.2]...
+  # NOTE: With later versions, cannot compile bbmustache...
   use Mix.Project
 
   def project do
