@@ -15,8 +15,8 @@ defmodule Identicon do
   alias __MODULE__.{DirPath, Log}
   alias __MODULE__.DirPath.Server
 
-  @default_dimension get_env(:default_dimension)
-  @valid_dimensions get_env(:valid_dimensions)
+  @default_dimension get_env(:default_dimension) |> dbg()
+  @valid_dimensions get_env(:valid_dimensions) |> dbg()
 
   @typedoc "Identicon"
   @type t :: binary
