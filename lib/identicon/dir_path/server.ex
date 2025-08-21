@@ -27,21 +27,25 @@ defmodule Identicon.DirPath.Server do
           {:noreply, state :: DirPath.t()}
   def handle_info(_message, dir_path), do: {:noreply, dir_path}
 
-  @spec handle_call(request :: atom, GenServer.from(), state :: DirPath.t()) ::
+  @spec handle_call(
+          request :: atom | tuple,
+          GenServer.from(),
+          state :: DirPath.t()
+        ) ::
           {:reply, reply :: DirPath.t(), state :: DirPath.t()}
   def handle_call(:get_dir, _from, dir_path) do
     {:reply, dir_path, dir_path}
+  end
+
+  def handle_call({:show, input, dimension}, _from, dir_path) do
+    :ok = DirPath.show(dir_path, input, dimension)
+    {:reply, :ok, dir_path}
   end
 
   @spec handle_cast(request :: tuple | atom, state :: DirPath.t()) ::
           {:noreply, state :: DirPath.t()}
   def handle_cast({:dir_path, new_dir_path}, dir_path) do
     {:noreply, DirPath.change_dir(dir_path, new_dir_path)}
-  end
-
-  def handle_cast({:show, input, dimension}, dir_path) do
-    :ok = DirPath.show(dir_path, input, dimension)
-    {:noreply, dir_path}
   end
 
   def handle_cast(:clear_dir, dir_path) do

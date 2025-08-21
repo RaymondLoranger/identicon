@@ -1,4 +1,10 @@
 defmodule Identicon.MixProject do
+  # NOTE: Only compiles with Erlang/OTP 26 [erts-14.2.2]...
+  # NOTE: With later versions, cannot compile bbmustache...
+  # Add -feature(maybe_expr, disable).
+  # after -module(bbmustache).
+  # in file ...deps/egd/_build/default/plugins/bbmustache/src/bbmustache.erl
+  # and then run mix deps.compile egd
   use Mix.Project
 
   def project do

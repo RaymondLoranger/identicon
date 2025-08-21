@@ -10,7 +10,6 @@ defmodule Identicon.Help do
   alias IO.ANSI.Plus, as: ANSI
 
   @default_dimension get_env(:default_dimension)
-  @default_switches get_env(:default_switches)
   @escript Mix.Project.config()[:escript][:name]
   @help_attrs get_env(:help_attrs)
 

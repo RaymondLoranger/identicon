@@ -50,7 +50,7 @@ defmodule Identicon.Image do
   @doc """
   Creates an image struct from the given `input` and `dimension`.
   """
-  @spec new(String.t(), pos_integer) :: t
+  # @spec new(String.t(), pos_integer) :: t
   def new(input, dimension) do
     %Image{input: input, dimension: dimension}
     |> set_chunk_size()
@@ -62,6 +62,11 @@ defmodule Identicon.Image do
     |> set_background()
     |> Builder.derive_indexes()
     |> Builder.derive_squares()
+  end
+
+  def check(input, dimension) do
+    IO.inspect(input, label: "INPUT")
+    IO.inspect(dimension, label: "DIMENSION")
   end
 
   ## Private functions

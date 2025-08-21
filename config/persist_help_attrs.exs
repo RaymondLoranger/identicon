@@ -1,6 +1,6 @@
 import Config
 
-config :github_issues,
+config :identikon,
   help_attrs: %{
     arg: :baby_blue,
     normal: :reset,

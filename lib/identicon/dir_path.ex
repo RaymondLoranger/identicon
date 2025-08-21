@@ -38,8 +38,9 @@ defmodule Identicon.DirPath do
     identicon = Image.new(input, dimension) |> Drawer.render()
 
     with :ok <- File.write(file_path, identicon),
-         _pid = spawn(fn -> open(open_with, file_path) end),
-         _pid = spawn(fn -> close(close_cmd, show_timeout) end) do
+         spawn(fn -> open(open_with, file_path) end),
+         Task.async(fn -> close(close_cmd, show_timeout) end)
+         |> Task.await(show_timeout + 1000) do
       :ok =
         Log.info(
           :identicon_shown,

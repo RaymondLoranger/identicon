@@ -1,18 +1,14 @@
 import Config
 
-config :github_issues, default_count: "9"
-
-config :github_issues,
+config :identikon,
   default_switches: %{
-    help: false,
-    bell: false
+    help: false
   }
 
-config :github_issues,
+config :identikon,
   parsing_options: [
     strict: [
-      help: :boolean,
-      bell: :boolean
+      help: :boolean
     ],
-    aliases: [h: :help, b: :bell]
+    aliases: [h: :help]
   ]

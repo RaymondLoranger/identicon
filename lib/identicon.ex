@@ -15,8 +15,8 @@ defmodule Identicon do
   alias __MODULE__.{DirPath, Log}
   alias __MODULE__.DirPath.Server
 
-  @default_dimension get_env(:default_dimension) |> dbg()
-  @valid_dimensions get_env(:valid_dimensions) |> dbg()
+  @default_dimension get_env(:default_dimension) |> String.to_integer()
+  @valid_dimensions get_env(:valid_dimensions)
 
   @typedoc "Identicon"
   @type t :: binary
@@ -37,7 +37,7 @@ defmodule Identicon do
 
   def show(input, dimension)
       when is_binary(input) and dimension in @valid_dimensions do
-    :ok = GenServer.cast(Server, {:show, input, dimension})
+    :ok = GenServer.call(Server, {:show, input, dimension}, 9000)
   end
 
   def show(input, dimension) do
