@@ -15,6 +15,8 @@ defmodule Identicon.Image do
   @enforce_keys [:input, :dimension]
   defstruct input: "",
             dimension: 5,
+            size: 250,
+            duration: 3000,
             chunk_size: 3,
             square_size: round(250 / 5),
             bytes_length: 3 * 5,
@@ -31,6 +33,10 @@ defmodule Identicon.Image do
           input: String.t(),
           # Number of squares down and across...
           dimension: pos_integer,
+          # Identicon size in pixels...
+          size: pos_integer,
+          # Display period in milliseconds...
+          duration: pos_integer,
           # Number of digest bytes per chunk...
           chunk_size: pos_integer,
           # Size of each square in pixels...
@@ -51,8 +57,8 @@ defmodule Identicon.Image do
   Creates an image struct from the given `input` and `dimension`.
   """
   # @spec new(String.t(), pos_integer) :: t
-  def new(input, dimension) do
-    %Image{input: input, dimension: dimension}
+  def new(input, dim, size, duration) do
+    %Image{input: input, dimension: dim, size: size, duration: duration}
     |> set_chunk_size()
     |> set_square_size()
     |> set_bytes_length()
@@ -64,11 +70,6 @@ defmodule Identicon.Image do
     |> Builder.derive_squares()
   end
 
-  def check(input, dimension) do
-    IO.inspect(input, label: "INPUT")
-    IO.inspect(dimension, label: "DIMENSION")
-  end
-
   ## Private functions
 
   @spec set_chunk_size(t) :: t
@@ -77,8 +78,8 @@ defmodule Identicon.Image do
   end
 
   @spec set_square_size(t) :: t
-  defp set_square_size(%Image{dimension: dimension} = image) do
-    put_in(image.square_size, round(side_length() / dimension))
+  defp set_square_size(%Image{dimension: dim, size: size} = image) do
+    put_in(image.square_size, round(size / dim))
   end
 
   @spec set_bytes_length(t) :: t
@@ -141,6 +142,6 @@ defmodule Identicon.Image do
   end
 
   # Identicon side length in pixels...
-  @spec side_length :: pos_integer
-  defp side_length, do: get_env(:side_length)
+  # @spec side_length :: pos_integer
+  # defp side_length, do: get_env(:side_length)
 end

@@ -5,7 +5,6 @@ matches = fn globs -> Enum.flat_map(globs, &wildcard.(&1)) end
 except = [
   "config/persist_app_constants.exs",
   "config/persist_test_selection.exs",
-  "config/runtime.exs",
   "test/identicon/image_test.exs"
 ]
 

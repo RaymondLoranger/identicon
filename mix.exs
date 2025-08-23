@@ -44,8 +44,7 @@ defmodule Identicon.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:crypto, :logger],
-      mod: {Identicon.TopSup, :ok}
+      extra_applications: [:crypto, :logger]
     ]
   end
 

@@ -52,19 +52,19 @@ defmodule Identicon.Log do
     """)
   end
 
-  info :identicon_shown, {input, dir_path, open_with, timeout, env} do
+  info :identicon_shown, {base_name, directory, open_with, duration, env} do
     """
-    \nIdenticon in file "#{input}.png" shown successfully for #{timeout} ms...
-    • Directory: #{inspect(dir_path) |> maybe_break(13)}
+    \nIdenticon in file "#{base_name}" shown successfully for #{duration} ms...
+    • Directory: #{inspect(directory) |> maybe_break(13)}
     • Command: #{open_with}...
     #{from(env, __MODULE__)}\
     """
   end
 
-  def error(:cannot_write, {input, dir_path, reason, env}) do
+  def error(:cannot_write, {base_name, directory, reason, env}) do
     Logger.error("""
-    \nCannot write identicon into file "#{input}.png"...
-    • Directory: #{inspect(dir_path) |> maybe_break(13)}
+    \nCannot write identicon into file "#{base_name}"...
+    • Directory: #{inspect(directory) |> maybe_break(13)}
     • Reason: #{"'#{:file.format_error(reason)}'" |> maybe_break(10)}
     #{from(env, __MODULE__)}\
     """)

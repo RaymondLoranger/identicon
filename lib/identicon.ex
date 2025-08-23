@@ -4,83 +4,79 @@
 # └────────────────────────────────────────────────────────────────┘
 defmodule Identicon do
   @moduledoc """
-  Opens a PNG file populated with an identicon derived from an input string and
-  a dimension (number of squares across or down).
+  Opens a PNG file populated with an identicon derived from an input string.
 
   ##### Based on the course [The Complete Elixir and Phoenix Bootcamp](https://www.udemy.com/the-complete-elixir-and-phoenix-bootcamp-and-tutorial/) by Stephen Grider.
   """
 
   use PersistConfig
 
-  alias __MODULE__.{DirPath, Log}
-  alias __MODULE__.DirPath.Server
-
-  @default_dimension get_env(:default_dimension) |> String.to_integer()
-  @valid_dimensions get_env(:valid_dimensions)
+  alias __MODULE__.{Drawer, Image, Log}
 
   @typedoc "Identicon"
   @type t :: binary
 
   @doc """
-  Opens a PNG file populated with an identicon derived from `input` and
-  `dimension`.
+  Opens a PNG file populated with an identicon derived from `input`,
+  `dimension` and `size`.
 
   ## Examples
 
       iex> Identicon.show("fig") # Writes to file "fig 5x5.png" and opens it.
-      iex> {:ok, timeout} = :application.get_env(:identicon, :show_timeout)
-      iex> Process.sleep(timeout + 1000)
       :ok
   """
-  @spec show(String.t(), pos_integer) :: :ok
-  def show(input, dimension \\ @default_dimension)
+  # @spec show(String.t(), pos_integer, keyword) :: :ok
+  def show(input, dim, bell?, size, duration) do
+    base_name = "#{input} #{dim}x#{dim}.png"
+    directory = directory()
+    file_path = String.replace("#{directory}/#{base_name}", "/", separator())
+    open_with = open_with()
+    close_cmd = close_cmd()
+    identicon = Image.new(input, dim, size, duration) |> Drawer.render()
 
-  def show(input, dimension)
-      when is_binary(input) and dimension in @valid_dimensions do
-    :ok = GenServer.call(Server, {:show, input, dimension}, 9000)
+    with :ok <- File.write(file_path, identicon) do
+      IO.write(if bell?, do: "\a", else: "")
+      spawn_link(fn -> open(open_with, file_path) end)
+
+      Task.async(fn -> close(close_cmd, duration) end)
+      |> Task.await(duration + 1000)
+
+      args = {base_name, directory, open_with, duration, __ENV__}
+      :ok = Log.info(:identicon_shown, args)
+    else
+      {:error, reason} ->
+        :ok = Log.error(:cannot_write, {base_name, directory, reason, __ENV__})
+    end
   end
 
-  def show(input, dimension) do
+  def show(input, dimension, _options) do
     :ok = Log.error(:invalid_args, {input, dimension, __ENV__})
   end
 
-  @doc """
-  Returns the current identicon directory.
+  ## Private functions
 
-  ## Examples
+  @spec open_with :: binary
+  defp open_with, do: get_env(:open_with)
 
-      iex> Identicon.get_dir() |> String.ends_with?("assets/identicons")
-      true
-  """
-  @spec get_dir :: DirPath.t()
-  def get_dir do
-    GenServer.call(Server, :get_dir)
+  @spec separator :: binary
+  defp separator, do: get_env(:separator)
+
+  @spec close_cmd :: charlist
+  defp close_cmd, do: get_env(:close_cmd)
+
+  # @spec show_timeout :: pos_integer
+  # defp show_timeout, do: get_env(:show_timeout)
+
+  @spec open(binary, binary) :: charlist
+  defp open(open_with, file_path) do
+    :os.cmd(~c[#{open_with} "#{file_path}"])
   end
 
-  @doc """
-  Clears the current identicon directory (deletes all PNG files).
-
-  ## Examples
-
-      iex> Identicon.clear_dir()
-      :ok
-  """
-  @spec clear_dir :: :ok
-  def clear_dir do
-    :ok = GenServer.cast(Server, :clear_dir)
+  @spec close(charlist, pos_integer) :: charlist
+  defp close(close_cmd, duration) do
+    Process.sleep(duration)
+    :os.cmd(close_cmd)
   end
 
-  @doc """
-  Changes the current identicon directory to `dir_path` (should exist).
-
-  ## Examples
-
-      iex> Identicon.change_dir("C:/Users/Ray/Desktop")
-      iex> Identicon.get_dir()
-      "c:/Users/Ray/Desktop"
-  """
-  @spec change_dir(DirPath.t()) :: :ok
-  def change_dir(dir_path) do
-    :ok = GenServer.cast(Server, {:dir_path, dir_path})
-  end
+  def directory, do: get_env(:directory)
 end

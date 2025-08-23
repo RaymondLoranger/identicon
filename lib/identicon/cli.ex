@@ -1,9 +1,8 @@
 defmodule Identicon.CLI do
   @moduledoc """
-  Parses the command line and prints a table of the first or last _n_ issues
-  of a GitHub project.
+  Parses the command line and shows an identicon derived from an input string.
 
-  ##### Inspired by the book [Programming Elixir](https://pragprog.com/titles/elixir16/programming-elixir-1-6) by Dave Thomas.
+  ##### Based on the course [The Complete Elixir and Phoenix Bootcamp](https://www.udemy.com/the-complete-elixir-and-phoenix-bootcamp-and-tutorial/) by Stephen Grider.
 
   ##### Reference https://dev.to/paulasantamaria/command-line-interfaces-structure-syntax-2533
   """
@@ -14,6 +13,9 @@ defmodule Identicon.CLI do
   alias Identicon.Help
 
   @default_dimension get_env(:default_dimension)
+  @valid_dimensions get_env(:valid_dimensions)
+  @valid_durations get_env(:valid_durations)
+  @valid_sizes get_env(:valid_sizes)
   @default_switches get_env(:default_switches)
   @parsing_options get_env(:parsing_options)
 
@@ -57,7 +59,7 @@ defmodule Identicon.CLI do
   @spec main(OptionParser.argv()) :: :ok
   def main(argv) do
     case OptionParser.parse(argv, @parsing_options) do
-      {switches, args, []} -> :ok = show_identicon(switches, args)
+      {switches, args, []} -> :ok = maybe_show_identicon(switches, args)
       _invalid -> :ok = Help.print_help()
     end
   end
@@ -82,23 +84,24 @@ defmodule Identicon.CLI do
 
   ## Private functions
 
-  @spec show_identicon(Keyword.t(), OptionParser.argv()) :: :ok
-  defp show_identicon(switches, [string]) do
-    show_identicon(switches, [string, @default_dimension])
+  @spec maybe_show_identicon(Keyword.t(), OptionParser.argv()) :: :ok
+  defp maybe_show_identicon(switches, [input]) do
+    maybe_show_identicon(switches, [input, @default_dimension])
   end
 
-  defp show_identicon(switches, [string, dimension]) do
-    with %{help: false} <-
+  defp maybe_show_identicon(switches, [input, dimension]) do
+    with %{help: false, bell: bell?, size: size, duration: duration} <-
            Map.merge(@default_switches, Map.new(switches)),
-         {dimension, ""} when dimension > 0 <- Integer.parse(dimension) do
-      :ok = Identicon.show(string, dimension)
-      # Process.sleep(4000)
+         {dim, ""} when dim in @valid_dimensions <- Integer.parse(dimension),
+         size when size in @valid_sizes <- size,
+         duration when duration in @valid_durations <- duration * 1000 do
+      :ok = Identicon.show(input, dim, bell?, size, duration)
     else
-      :error -> :ok = Help.print_help()
+      _error -> :ok = Help.print_help()
     end
   end
 
-  defp show_identicon(_switches, _args) do
+  defp maybe_show_identicon(_switches, _args) do
     :ok = Help.print_help()
   end
 end

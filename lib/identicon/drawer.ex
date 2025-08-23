@@ -39,7 +39,7 @@ defmodule Identicon.Drawer do
       :ok = :egd.filledRectangle(egd_image, top_left, bottom_right, fill_color)
     end)
 
-    # Renders a binary in png format.
+    # Renders a binary in PNG format.
     identicon = :egd.render(egd_image)
     :ok = :egd.destroy(egd_image)
     identicon
