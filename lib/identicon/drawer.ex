@@ -22,14 +22,14 @@ defmodule Identicon.Drawer do
     area_width = area_height = square_size * dimension
     # Creates an image area and returns its reference (pid).
     egd_image = :egd.create(area_width, area_height)
-    background = :egd.color(background)
+    bg_color = :egd.color(background)
 
     :ok =
       :egd.filledRectangle(
         egd_image,
         {0, 0},
         {area_width, area_height},
-        background
+        bg_color
       )
 
     fill_color = :egd.color(color)
@@ -39,7 +39,7 @@ defmodule Identicon.Drawer do
       :ok = :egd.filledRectangle(egd_image, top_left, bottom_right, fill_color)
     end)
 
-    # Renders a binary in png format.
+    # Renders a binary in PNG format.
     identicon = :egd.render(egd_image)
     :ok = :egd.destroy(egd_image)
     identicon

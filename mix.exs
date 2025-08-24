@@ -5,19 +5,42 @@ defmodule Identicon.MixProject do
 
   def project do
     [
-      app: :identicon,
-      version: "0.1.32",
+      app: :identikon,
+      version: "0.1.0",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
+      name: "Identicon",
+      source_url: source_url(),
+      description: description(),
+      package: package(),
+      escript: escript(),
       deps: deps()
+    ]
+  end
+
+  defp source_url do
+    "https://github.com/RaymondLoranger/identicon"
+  end
+
+  defp description do
+    """
+    Opens an identicon PNG based on an input string, a dimension and a size.
+    """
+  end
+
+  defp package do
+    [
+      files: ["lib", "mix.exs", "README*", "config/persist*.exs"],
+      maintainers: ["Raymond Loranger"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => source_url()}
     ]
   end
 
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:crypto, :logger],
-      mod: {Identicon.TopSup, :ok}
+      extra_applications: [:crypto, :logger]
     ]
   end
 
@@ -30,8 +53,16 @@ defmodule Identicon.MixProject do
       {:egd, github: "RaymondLoranger/egd"},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:file_only_logger, "~> 0.2"},
+      {:io_ansi_plus, "~> 0.1"},
       {:log_reset, "~> 0.1"},
       {:persist_config, "~> 0.4", runtime: false}
+    ]
+  end
+
+  defp escript do
+    [
+      main_module: Identicon.CLI,
+      name: :ic
     ]
   end
 end

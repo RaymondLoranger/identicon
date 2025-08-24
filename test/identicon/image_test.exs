@@ -11,11 +11,12 @@ defmodule Identicon.ImageTest do
     banana = %Image{
       input: "banana",
       dimension: 5,
+      size: 250,
       chunk_size: 3,
       square_size: 50,
       bytes_length: 15,
-      # 5 chunks of 3 bytes...
       hash_algo: :md5,
+      # 5 chunks of 3 bytes...
       bytes: [
         114, 179,   2,
         191,  41, 122,
@@ -24,7 +25,7 @@ defmodule Identicon.ImageTest do
         239, 239, 124
       ],
       color: {114, 179, 2},
-      background: {141, 76, 253},
+      background: {255 - 114, 255 - 179, 255 - 2},
       # 9 indexes of 9 colored squares
       indexes: [0, 2, 4, 7, 10, 11, 13, 14, 22],
       # 9 corner tuples of 9 colored squares
@@ -48,19 +49,21 @@ defmodule Identicon.ImageTest do
     @tag :image_test_1
     test "returns an image struct having field color", %{image: banana} do
       :ok = Log.debug(:assert_banana_color, {banana.color, __ENV__})
-      assert Image.new(banana.input, banana.dimension).color == banana.color
+      image = Image.new(banana.input, banana.dimension, banana.size)
+      assert image.color == banana.color
     end
 
     @tag :image_test_2
     test "returns an image struct having field indexes", %{image: banana} do
       Log.debug(:assert_banana_indexes, {banana.indexes, __ENV__})
-      assert Image.new(banana.input, banana.dimension).indexes == banana.indexes
+      image = Image.new(banana.input, banana.dimension, banana.size)
+      assert image.indexes == banana.indexes
     end
 
     @tag :image_test_3
     test "returns an image struct", %{image: banana} do
       :ok = Log.debug(:assert_banana_struct, {banana, __ENV__})
-      assert Image.new(banana.input, banana.dimension) == banana
+      assert Image.new(banana.input, banana.dimension, banana.size) == banana
     end
   end
 end
