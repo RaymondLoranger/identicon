@@ -22,14 +22,14 @@ defmodule Identicon.Drawer do
     area_width = area_height = square_size * dimension
     # Creates an image area and returns its reference (pid).
     egd_image = :egd.create(area_width, area_height)
-    background = :egd.color(background)
+    bg_color = :egd.color(background)
 
     :ok =
       :egd.filledRectangle(
         egd_image,
         {0, 0},
         {area_width, area_height},
-        background
+        bg_color
       )
 
     fill_color = :egd.color(color)

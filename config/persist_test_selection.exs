@@ -4,10 +4,7 @@ import Config
 config :identikon,
   doctests: %{
     Identicon => [
-      get_dir: 0,
-      # show: 2,
-      # clear_dir: 0,
-      # change_dir: 1,
+      # show: 5,
     ],
   }
 

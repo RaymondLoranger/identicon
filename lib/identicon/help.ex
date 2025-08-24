@@ -11,10 +11,11 @@ defmodule Identicon.Help do
 
   @default_dimension get_env(:default_dimension)
   @default_switches get_env(:default_switches)
-  @valid_sizes get_env(:valid_sizes)
-  @valid_durations get_env(:valid_durations)
   @escript Mix.Project.config()[:escript][:name]
   @help_attrs get_env(:help_attrs)
+  @valid_dimensions get_env(:valid_dimensions)
+  @valid_durations get_env(:valid_durations)
+  @valid_sizes get_env(:valid_sizes)
 
   @doc """
   Prints info on the escript command's usage and syntax.
@@ -34,64 +35,75 @@ defmodule Identicon.Help do
     prefix = help_format([:section, :normal], texts)
 
     line_arguments =
-      help_format([:arg], ["<arbitrary-string> [<identicon-dimension>]"])
+      help_format([:arg], ["<input> [<dimension>]"])
 
     line_flags = help_format([:switch], ["[-b | --bell]"])
 
     line_size =
       help_format([:switch, :arg, :switch], [
         "[-s | --size ",
-        "<identicon-size-in-pixels>",
+        "<size>",
         "]"
       ])
 
     line_duration =
       help_format([:switch, :arg, :switch], [
         "[-d | --duration ",
-        "<display-time-in-seconds>",
+        "<duration>",
         "]"
       ])
 
     line_where = help_format([:section], ["where:"])
 
     line_default_dimension =
-      help_format([:normal, :arg, :normal, :value], [
+      help_format([:normal, :arg, :normal, :value, :normal], [
         "  - default ",
-        "<identicon-dimension>",
+        "<dimension>",
         " is ",
-        "#{@default_dimension}"
+        "#{@default_dimension}",
+        " (squares)"
+      ])
+
+    line_values_of_dimensions =
+      help_format([:normal, :arg, :normal, :value], [
+        "  - ",
+        "<dimension>",
+        " can be ",
+        "#{values_of(@valid_dimensions)}"
       ])
 
     line_default_size =
-      help_format([:normal, :arg, :normal, :value], [
+      help_format([:normal, :arg, :normal, :value, :normal], [
         "  - default ",
-        "<identicon-size-in-pixels>",
+        "<size>",
         " is ",
-        "#{@default_switches[:size]}"
+        "#{@default_switches[:size]}",
+        " (pixels)"
       ])
 
     line_values_of_size =
       help_format([:normal, :arg, :normal, :value], [
-        "  - values of ",
-        "<identicon-size-in-pixels>",
-        " are ",
-        "#{Enum.to_list(@valid_sizes) |> inspect() |> String.slice(1..-2//1)}"
+        "  - ",
+        "<size>",
+        " can be ",
+        "#{values_of(@valid_sizes)}"
       ])
 
     line_default_duration =
-      help_format([:normal, :arg, :normal, :value], [
+      help_format([:normal, :arg, :normal, :value, :normal], [
         "  - default ",
-        "<display-time-in-seconds>",
+        "<duration>",
         " is ",
-        "#{@default_switches[:duration]}"
+        "#{@default_switches[:duration]}",
+        " (seconds)"
       ])
 
     line_values_of_duration =
       help_format([:normal, :arg, :normal, :value], [
-        "  - values of ",
-        "<display-time-in-seconds>",
-        " are ",
-        "#{Enum.to_list(@valid_durations) |> inspect() |> String.slice(1..-2//1)}"
+        "  - ",
+        "<duration>",
+        " can be ",
+        "#{values_of(@valid_durations)}"
       ])
 
     IO.write("""
@@ -101,6 +113,7 @@ defmodule Identicon.Help do
     #{filler} #{line_duration}
     #{line_where}
     #{line_default_dimension}
+    #{line_values_of_dimensions}
     #{line_default_size}
     #{line_values_of_size}
     #{line_default_duration}
@@ -116,5 +129,9 @@ defmodule Identicon.Help do
     |> Enum.zip(texts)
     |> Enum.map(&Tuple.to_list/1)
     |> ANSI.format()
+  end
+
+  defp values_of(range) do
+    Enum.to_list(range) |> inspect() |> String.slice(1..-2//1)
   end
 end

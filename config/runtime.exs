@@ -7,6 +7,7 @@ import Config
   end
 
 directory = "./assets/identicons/#{config_env()}"
+File.mkdir_p(directory)
 
 config :identikon, separator: separator
 config :identikon, open_with: open_with

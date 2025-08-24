@@ -1,16 +1,10 @@
 defmodule Identicon.MixProject do
-  # NOTE: Only compiles with Erlang/OTP 26 [erts-14.2.2]...
-  # NOTE: With later versions, cannot compile bbmustache...
-  # Add -feature(maybe_expr, disable).
-  # after -module(bbmustache).
-  # in file ...deps/egd/_build/default/plugins/bbmustache/src/bbmustache.erl
-  # and then run mix deps.compile egd
   use Mix.Project
 
   def project do
     [
       app: :identikon,
-      version: "0.1.32",
+      version: "0.1.0",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "Identicon",
@@ -28,7 +22,7 @@ defmodule Identicon.MixProject do
 
   defp description do
     """
-    Opens an identicon file derived from an input string and a dimension.
+    Opens an identicon PNG based on an input string, a dimension and a size.
     """
   end
 

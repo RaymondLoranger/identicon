@@ -3,8 +3,6 @@ defmodule Identicon.Image.Builder do
   Updates fields `indexes` and `squares` of an image struct.
   """
 
-  use PersistConfig
-
   alias Identicon.Image
 
   @typedoc "Image square index"
