@@ -1,7 +1,7 @@
 # Identicon
 
 Opens a PNG file populated with an identicon derived from an input string,
-a dimension (number of squares across and down) and a size (in pixels).
+a dimension (number of squares across/down) and a size (number of pixels).
 
 ##### Based on the course [The Complete Elixir and Phoenix Bootcamp](https://www.udemy.com/the-complete-elixir-and-phoenix-bootcamp-and-tutorial/) by Stephen Grider.
 
