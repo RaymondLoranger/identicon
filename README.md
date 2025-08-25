@@ -31,29 +31,29 @@ ic --help
 
 ic kiwi 7
 
-![alt text](<assets/images/kiwi 250px 7x7.png>)
+![alt text](<images/kiwi 250px 7x7.png>)
 
 #### Example 2
 
 ic pineapple 9 --size 350 --duration 7 --bell
 
-![alt text](<assets/images/pineapple 350px 9x9.png>)
+![alt text](<images/pineapple 350px 9x9.png>)
 
 #### Example 3
 
 ic orange 7 -s 300 -d 6
 
-![alt text](<assets/images/orange 300px 7x7.png>)
+![alt text](<images/orange 300px 7x7.png>)
 
 #### Example 4
 
 ic guava --no-bell --no-help
 
-![alt text](<assets/images/guava 250px 5x5.png>)
+![alt text](<images/guava 250px 5x5.png>)
 
 #### Example 5
 
 ic --help
 
-![alt text](<assets/images/ic help.png>)
+![alt text](<images/ic help.png>)
 
