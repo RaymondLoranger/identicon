@@ -30,17 +30,20 @@ defmodule Identicon do
 
   ## Examples
 
+      # Writes to file "fig 250px 5x5.png" and opens it for 3 seconds.
       Identicon.show("fig") # Writes to file "fig 250px 5x5.png" and opens it.
+      
+      # Writes to file "grape 300px 6x6.png" and opens it for 5 seconds.
+      Identicon.show("grape", dimension: 6, size: 300, duration: 5)
   """
-  @dialyzer {:no_return, [show: 1, show: 2, show: 3, show: 4, show: 5]}
-  @spec show(String.t(), pos_integer, pos_integer, pos_integer, boolean) :: :ok
-  def show(
-        input,
-        dim \\ @default_dim,
-        size \\ @default_size,
-        duration \\ @default_duration,
-        bell? \\ @default_bell?
-      ) do
+  @dialyzer {:no_return, [show: 1, show: 2]}
+  @spec show(String.t(), keyword) :: :ok
+  def show(input, options \\ []) do
+    dim = options[:dimension] || @default_dim
+    size = options[:size] || @default_size
+    duration = options[:duration] || @default_duration
+    bell? = options[:bell] || @default_bell?
+
     base_name = "#{input} #{size}px #{dim}x#{dim}.png"
     file_path = String.replace("#{@directory}/#{base_name}", "/", separator())
     open_with = open_with()

@@ -90,7 +90,8 @@ defmodule Identicon.CLI do
          {dim, ""} when dim in @valid_dimensions <- Integer.parse(dimension),
          size when size in @valid_sizes <- size,
          duration when duration in @valid_durations <- duration do
-      :ok = Identicon.show(input, dim, size, duration, bell?)
+      options = [dimension: dim, size: size, duration: duration, bell: bell?]
+      :ok = Identicon.show(input, options)
     else
       _error -> :ok = Help.print_help()
     end
