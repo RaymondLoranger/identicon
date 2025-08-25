@@ -7,33 +7,53 @@ a dimension (number of squares across and down) and a size (in pixels).
 
 ## Usage
 
-To use the Identicon app, clone `identikon` from GitHub and compile it:
+To use `Identicon` locally, run these commands:
 
-  - git clone https://github.com/RaymondLoranger/identikon
-  - cd identikon
-  - mix deps.get
-  - mix compile
+```
+git clone https://github.com/RaymondLoranger/identicon
+cd identicon
+mix deps.get
+mix escript.build
+mix escript.install
+```
+
+You can now run the application like so:
+
+```
+ic kiwi 7
+ic pineapple 9 --size 350 --duration 7 --bell
+ic orange 7 -s 300 -d 6
+ic guava --no-bell --no-help
+ic --help
+```
 
 #### Example 1
 
-From the "identikon" folder, start the interactive shell:
+ic kiwi 7
 
-  - cd identikon
-  - iex -S mix
-  - Identicon.show("fig") # Writes to file "fig 250px 5x5.png" and opens it.
-  ![alt text](<assets/images/fig 250px 5x5.png>)
-  - Identicon.show("pea", 7) # Writes to file "pea 250px 7x7.png" and opens it.
-  ![alt text](<assets/images/pea 250px 7x7.png>)
+![alt text](<assets/images/kiwi 250px 7x7.png>)
 
 #### Example 2
 
-To run the API in a remote shell, start an interactive shell like so:
+ic pineapple 9 --size 350 --duration 7 --bell
 
-  - cd identikon
-  - iex --sname foo -S mix
+![alt text](<assets/images/pineapple 350px 9x9.png>)
 
-Then from another interactive shell:
+#### Example 3
 
-  - iex --sname bar --remsh foo
-  - Identicon.show("kiwi") # Writes to file "kiwi 250px 5x5.png" and opens it.
+ic orange 7 -s 300 -d 6
+
+![alt text](<assets/images/orange 300px 7x7.png>)
+
+#### Example 4
+
+ic guava --no-bell --no-help
+
+![alt text](<assets/images/guava 250px 5x5.png>)
+
+#### Example 5
+
+ic --help
+
+![alt text](<assets/images/ic help.png>)
 

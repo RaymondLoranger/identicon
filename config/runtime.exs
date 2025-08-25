@@ -6,10 +6,6 @@ import Config
     {:unix, __os} -> {"/", "open", ~c"killall Preview"}
   end
 
-directory = "./assets/identicons/#{config_env()}"
-File.mkdir_p(directory)
-
 config :identikon, separator: separator
 config :identikon, open_with: open_with
 config :identikon, close_cmd: close_cmd
-config :identikon, directory: Path.expand(directory)

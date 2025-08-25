@@ -19,6 +19,7 @@ defmodule Identicon do
   @default_size @default_switches.size
   @default_duration @default_switches.duration
   @default_bell? @default_switches.bell
+  @directory get_env(:directory)
 
   @typedoc "Identicon"
   @type t :: binary
@@ -45,8 +46,7 @@ defmodule Identicon do
         bell? \\ @default_bell?
       ) do
     base_name = "#{input} #{size}px #{dim}x#{dim}.png"
-    directory = directory()
-    file_path = String.replace("#{directory}/#{base_name}", "/", separator())
+    file_path = String.replace("#{@directory}/#{base_name}", "/", separator())
     open_with = open_with()
     close_cmd = close_cmd()
     identicon = Image.new(input, dim, size) |> Drawer.render()
@@ -57,11 +57,11 @@ defmodule Identicon do
       closetask = Task.async(fn -> close(close_cmd, duration) end)
       await_max = :timer.seconds(duration + 1)
       _charlist = Task.await(closetask, await_max)
-      args = {base_name, directory, open_with, duration, __ENV__}
+      args = {base_name, @directory, open_with, duration, __ENV__}
       :ok = Log.info(:identicon_shown, args)
     else
       {:error, reason} ->
-        :ok = Log.error(:cannot_write, {base_name, directory, reason, __ENV__})
+        :ok = Log.error(:cannot_write, {base_name, @directory, reason, __ENV__})
     end
   end
 
@@ -88,7 +88,4 @@ defmodule Identicon do
     :timer.seconds(duration) |> Process.sleep()
     :os.cmd(close_cmd)
   end
-
-  @spec directory :: binary
-  def directory, do: get_env(:directory)
 end

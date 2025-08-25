@@ -1,12 +1,10 @@
 defmodule Identicon.MixProject do
-  # NOTE: Only compiles with Erlang/OTP 26 [erts-14.2.2]...
-  # NOTE: With later versions, cannot compile bbmustache...
   use Mix.Project
 
   def project do
     [
       app: :identikon,
-      version: "0.1.2",
+      version: "0.1.3",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "Identicon",
@@ -24,7 +22,7 @@ defmodule Identicon.MixProject do
 
   defp description do
     """
-    Opens an identicon PNG based on an input string, a dimension and a size.
+    Opens an identicon PNG derived from an input string, a dimension and a size.
     """
   end
 
@@ -48,10 +46,8 @@ defmodule Identicon.MixProject do
   defp deps do
     [
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
-      # See link below for an explanation of this github replacement...
+      # See the links below for an explanation of this :egd replacement...
       # {:egd, github: "erlang/egd"},
-      # {:egd, github: "RaymondLoranger/egd"},
-      # {:egd24, "~> 0.10"},
       {:egd, "~> 0.10.1", hex: :egd24},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:file_only_logger, "~> 0.2"},
@@ -70,3 +66,5 @@ defmodule Identicon.MixProject do
 end
 
 # https://elixirforum.com/t/error-when-rendring-in-egd-undefinedfunctionerror-function-zlib-crc32-2-is-undefined-or-private/66639
+
+# https://github.com/erlang/egd/pull/1
