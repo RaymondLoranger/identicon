@@ -9,6 +9,7 @@ defmodule Identicon.Drawer do
   @doc """
   Converts image struct `image` into an identicon.
   """
+  @dialyzer {:nowarn_function, [render: 1]}
   @spec render(Image.t()) :: Identicon.t()
   def render(
         %Image{

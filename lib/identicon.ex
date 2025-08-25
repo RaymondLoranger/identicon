@@ -31,6 +31,11 @@ defmodule Identicon do
 
       Identicon.show("fig") # Writes to "fig 250px 5x5.png" and opens it.
   """
+  @dialyzer {:nowarn_function, [show: 5]}
+  @dialyzer {:nowarn_function, [show: 4]}
+  @dialyzer {:nowarn_function, [show: 3]}
+  @dialyzer {:nowarn_function, [show: 2]}
+  @dialyzer {:nowarn_function, [show: 1]}
   @spec show(String.t(), pos_integer, pos_integer, pos_integer, boolean) :: :ok
   def show(
         input,
@@ -71,11 +76,13 @@ defmodule Identicon do
   @spec close_cmd :: charlist
   defp close_cmd, do: get_env(:close_cmd)
 
+  @dialyzer {:nowarn_function, [open: 2]}
   @spec open(binary, binary) :: charlist
   defp open(open_with, file_path) do
     :os.cmd(~c[#{open_with} "#{file_path}"])
   end
 
+  @dialyzer {:nowarn_function, [close: 2]}
   @spec close(charlist, pos_integer) :: charlist
   defp close(close_cmd, duration) do
     :timer.seconds(duration) |> Process.sleep()

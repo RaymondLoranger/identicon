@@ -6,7 +6,7 @@ defmodule Identicon.MixProject do
   def project do
     [
       app: :identikon,
-      version: "0.1.1",
+      version: "0.1.2",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "Identicon",
@@ -50,7 +50,9 @@ defmodule Identicon.MixProject do
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
       # See link below for an explanation of this github replacement...
       # {:egd, github: "erlang/egd"},
-      {:egd, github: "RaymondLoranger/egd"},
+      # {:egd, github: "RaymondLoranger/egd"},
+      # {:egd24, "~> 0.10"},
+      {:egd, "~> 0.10.1", hex: :egd24},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:file_only_logger, "~> 0.2"},
       {:io_ansi_plus, "~> 0.1"},
