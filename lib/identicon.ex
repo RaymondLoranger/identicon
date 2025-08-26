@@ -30,11 +30,11 @@ defmodule Identicon do
 
   ## Examples
 
-      # Writes to file "fig 250px 5x5.png" and opens it for 3 seconds.
-      Identicon.show("fig") # Writes to file "fig 250px 5x5.png" and opens it.
-      
-      # Writes to file "grape 300px 6x6.png" and opens it for 5 seconds.
-      Identicon.show("grape", dimension: 6, size: 300, duration: 5)
+      # Writes to file "olive 250px 5x5.png" and opens it for 3 seconds.
+      Identicon.show("olive")
+
+      # Writes to file "grape 300px 7x7.png" and opens it for 5 seconds.
+      Identicon.show("grape", dimension: 7, size: 300, duration: 5)
   """
   @dialyzer {:no_return, [show: 1, show: 2]}
   @spec show(String.t(), keyword) :: :ok

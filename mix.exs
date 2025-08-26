@@ -4,7 +4,7 @@ defmodule Identicon.MixProject do
   def project do
     [
       app: :identikon,
-      version: "0.1.7",
+      version: "0.1.8",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "Identicon",
