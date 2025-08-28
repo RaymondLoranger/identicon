@@ -2,10 +2,21 @@ defmodule Identicon.Image do
   @moduledoc """
   Creates an image struct to be converted into an identicon.
 
-  The image struct contains the fields `input`, `dimension`, `size`,
-  `chunk_size`, `square_size`, `bytes_length`, `hash_algo`, `bytes`, `color`,
-  `background`, `indexes` and `squares` representing the properties of an
-  identicon image.
+  The image struct contains the fields:
+    - `input`
+    - `dimension`
+    - `size`
+    - `chunk_size`
+    - `square_size`
+    - `bytes_length`
+    - `hash_algo`
+    - `bytes`
+    - `color`
+    - `background`
+    - `indexes`
+    - `squares`
+
+  representing the properties of an identicon image.
   """
 
   use PersistConfig
@@ -31,7 +42,7 @@ defmodule Identicon.Image do
   @type t :: %Image{
           # Input string to be hashed...
           input: String.t(),
-          # Number of squares down and across...
+          # Number of squares across and down...
           dimension: pos_integer,
           # Identicon size in pixels...
           size: pos_integer,
@@ -39,11 +50,15 @@ defmodule Identicon.Image do
           chunk_size: pos_integer,
           # Size of each square in pixels...
           square_size: pos_integer,
+          # Number of digest bytes...
           bytes_length: pos_integer,
+          # Hash algorithm...
           hash_algo: atom,
           # Digest bytes...
           bytes: [byte],
+          # Foreground color...
           color: tuple,
+          # Background color...
           background: tuple,
           # Indexes of colored squares...
           indexes: [Builder.square_index()],
@@ -52,11 +67,11 @@ defmodule Identicon.Image do
         }
 
   @doc """
-  Creates an image struct from the given `input`, `dim` and `size`.
+  Creates an image struct from the given `input`, `dimension` and `size`.
   """
   @spec new(String.t(), pos_integer, pos_integer) :: t
-  def new(input, dim, size) do
-    %Image{input: input, dimension: dim, size: size}
+  def new(input, dimension, size) do
+    %Image{input: input, dimension: dimension, size: size}
     |> set_chunk_size()
     |> set_square_size()
     |> set_bytes_length()
@@ -76,8 +91,8 @@ defmodule Identicon.Image do
   end
 
   @spec set_square_size(t) :: t
-  defp set_square_size(%Image{dimension: dim, size: size} = image) do
-    put_in(image.square_size, round(size / dim))
+  defp set_square_size(%Image{dimension: dimension, size: size} = image) do
+    put_in(image.square_size, round(size / dimension))
   end
 
   @spec set_bytes_length(t) :: t

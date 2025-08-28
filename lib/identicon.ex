@@ -12,59 +12,90 @@ defmodule Identicon do
 
   use PersistConfig
 
-  alias __MODULE__.{Drawer, Image, Log}
+  alias __MODULE__.{Drawer, Help, Image, Log}
 
-  @default_dim get_env(:default_dimension) |> String.to_integer()
+  @default_dimension get_env(:default_dimension)
   @default_switches get_env(:default_switches)
-  @default_size @default_switches.size
-  @default_duration @default_switches.duration
   @default_bell? @default_switches.bell
+  @default_duration @default_switches.duration
+  @default_size @default_switches.size
   @directory get_env(:directory)
+  @valid_dimensions get_env(:valid_dimensions)
+  @valid_durations get_env(:valid_durations)
+  @valid_sizes get_env(:valid_sizes)
 
   @typedoc "Identicon"
   @type t :: binary
 
+  defguardp valid?(input, dimension, size, duration)
+            when is_binary(input) and dimension in @valid_dimensions and
+                   size in @valid_sizes and duration in @valid_durations
+
   @doc """
-  Opens a PNG file populated with an identicon derived from `input`, `dim` and
-  `size`.
+  Opens a PNG file populated with an identicon derived from `input` and
+  `options`.
+
+  ## Options
+
+    * `:dimension` - number of squares across and down the identicon will have.
+      Can be `5` (default), `6`, `7`, `8`, `9` or `10`.
+
+    * `:size` - width and height in pixels the identicon will have.
+      Can be `250` (default), `300` or `350`.
+
+    * `:duration` - number of seconds the identicon will be displayed.
+      Can be `3` (default), `4`, `5`, `6`, `7`, `8` or `9`.
+
+    * `:bell` - whether to ring the bell upon displaying the identicon.
+      Defaults to `false`.
 
   ## Examples
 
-      # Writes to file "olive 250px 5x5.png" and opens it for 3 seconds.
-      Identicon.show("olive")
+      # Creates file "olive 250px 5x5.png" and opens it for 3 seconds.
+      Identicon.display("olive")
 
-      # Writes to file "grape 300px 7x7.png" and opens it for 5 seconds.
-      Identicon.show("grape", dimension: 7, size: 300, duration: 5)
+      # Creates file "grape 300px 7x7.png" and opens it for 5 seconds.
+      Identicon.display("grape", dimension: 7, size: 300, duration: 5)
   """
-  @dialyzer {:no_return, [show: 1, show: 2]}
-  @spec show(String.t(), keyword) :: :ok
-  def show(input, options \\ []) do
-    dim = options[:dimension] || @default_dim
-    size = options[:size] || @default_size
-    duration = options[:duration] || @default_duration
-    bell? = options[:bell] || @default_bell?
+  @spec display(String.t(), keyword) :: :ok
+  def display(input, options \\ []) do
+    dimension = Keyword.get(options, :dimension, @default_dimension)
+    size = Keyword.get(options, :size, @default_size)
+    duration = Keyword.get(options, :duration, @default_duration)
+    bell? = Keyword.get(options, :bell, @default_bell?)
+    :ok = _display(input, dimension, size, duration, bell?)
+  end
 
-    base_name = "#{input} #{size}px #{dim}x#{dim}.png"
+  ## Private functions
+
+  @spec _display(String.t(), pos_integer, pos_integer, pos_integer, any) :: :ok
+  defp _display(input, dimension, size, duration, bell?)
+       when valid?(input, dimension, size, duration) do
+    base_name = "#{input} #{size}px #{dimension}x#{dimension}.png"
     file_path = String.replace("#{@directory}/#{base_name}", "/", separator())
     open_with = open_with()
     close_cmd = close_cmd()
-    identicon = Image.new(input, dim, size) |> Drawer.render()
+    identicon = Image.new(input, dimension, size) |> Drawer.render()
 
     with :ok <- File.write(file_path, identicon) do
-      IO.write(if bell?, do: "\a", else: "")
+      info = self() |> Process.info()
+      iex? = info[:dictionary][:iex_server]
+      IO.write(if !iex? && bell?, do: "\a", else: "")
       _open_pid = spawn_link(fn -> open(open_with, file_path) end)
       closetask = Task.async(fn -> close(close_cmd, duration) end)
       await_max = :timer.seconds(duration + 1)
       _charlist = Task.await(closetask, await_max)
       args = {base_name, @directory, open_with, duration, __ENV__}
-      :ok = Log.info(:identicon_shown, args)
+      :ok = Log.info(:identicon_displayed, args)
     else
       {:error, reason} ->
         :ok = Log.error(:cannot_write, {base_name, @directory, reason, __ENV__})
     end
   end
 
-  ## Private functions
+  defp _display(_input, _dimension, _size, _duration, _bell?) do
+    :ok = Help.print_help()
+  end
 
   @spec open_with :: binary
   defp open_with, do: get_env(:open_with)

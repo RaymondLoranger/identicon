@@ -4,7 +4,7 @@ defmodule Identicon.MixProject do
   def project do
     [
       app: :identikon,
-      version: "0.1.8",
+      version: "0.1.9",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "Identicon",
@@ -22,7 +22,7 @@ defmodule Identicon.MixProject do
 
   defp description do
     """
-    Opens an identicon PNG derived from an input string, a dimension and a size.
+    Displays an identicon derived from an input string, a dimension and a size.
     """
   end
 

@@ -1,7 +1,7 @@
 defmodule Identicon.CLI do
   @moduledoc """
-  Parses the command line and shows an identicon derived from an input string,
-  a dimension and a size.
+  Parses the command line and displays an identicon derived from an input
+  string, a dimension and a size.
 
   ##### Based on the course [The Complete Elixir and Phoenix Bootcamp](https://www.udemy.com/the-complete-elixir-and-phoenix-bootcamp-and-tutorial/) by Stephen Grider.
 
@@ -14,24 +14,20 @@ defmodule Identicon.CLI do
   alias Identicon.Help
 
   @default_dimension get_env(:default_dimension)
+  @default_dimension to_string(@default_dimension)
+  @default_switches get_env(:default_switches)
+  @parsing_options get_env(:parsing_options)
   @valid_dimensions get_env(:valid_dimensions)
   @valid_durations get_env(:valid_durations)
   @valid_sizes get_env(:valid_sizes)
-  @default_switches get_env(:default_switches)
-  @parsing_options get_env(:parsing_options)
-
-  @typedoc "GitHub project"
-  @type project :: String.t()
-  @typedoc "GitHub user"
-  @type user :: String.t()
 
   @doc """
-  Parses the command line and shows an identicon derived from an input string,
-  a dimension and a size.
+  Parses the command line and displays an identicon derived from an input
+  string, a dimension and a size.
 
-  `argv` can be "-h" or "--help", which prints info on the command's
-  usage and syntax. Otherwise it is an input string, a dimension, and
-  optionally the size of the identicon and its display duration.
+  `argv` can be "-h" or "--help", which prints info on the command's usage and
+  syntax. Otherwise it is an input string and optionally the identicon
+  dimension, its overall size and its display duration.
 
   ## Parameters
 
@@ -54,7 +50,7 @@ defmodule Identicon.CLI do
   @spec main(OptionParser.argv()) :: :ok
   def main(argv) do
     case OptionParser.parse(argv, @parsing_options) do
-      {switches, args, []} -> :ok = maybe_show_identicon(switches, args)
+      {switches, args, []} -> :ok = maybe_display_identicon(switches, args)
       _invalid -> :ok = Help.print_help()
     end
   end
@@ -71,7 +67,6 @@ defmodule Identicon.CLI do
       $env:MIX_ENV="dev";  mix run -e 'Identicon.CLI.main()'
       $env:MIX_ENV="prod"; mix run -e 'Identicon.CLI.main()'
   """
-
   @spec main :: :ok
   def main do
     :ok = main(["pumpkin", "7"])
@@ -79,25 +74,25 @@ defmodule Identicon.CLI do
 
   ## Private functions
 
-  @spec maybe_show_identicon(Keyword.t(), OptionParser.argv()) :: :ok
-  defp maybe_show_identicon(switches, [input]) do
-    maybe_show_identicon(switches, [input, @default_dimension])
+  @spec maybe_display_identicon(keyword, OptionParser.argv()) :: :ok
+  defp maybe_display_identicon(switches, [input]) do
+    maybe_display_identicon(switches, [input, @default_dimension])
   end
 
-  defp maybe_show_identicon(switches, [input, dimension]) do
+  defp maybe_display_identicon(switches, [input, dimension]) do
     with %{help: false, bell: bell?, size: size, duration: duration} <-
            Map.merge(@default_switches, Map.new(switches)),
          {dim, ""} when dim in @valid_dimensions <- Integer.parse(dimension),
          size when size in @valid_sizes <- size,
          duration when duration in @valid_durations <- duration do
       options = [dimension: dim, size: size, duration: duration, bell: bell?]
-      :ok = Identicon.show(input, options)
+      :ok = Identicon.display(input, options)
     else
       _error -> :ok = Help.print_help()
     end
   end
 
-  defp maybe_show_identicon(_switches, _args) do
+  defp maybe_display_identicon(_switches, _args) do
     :ok = Help.print_help()
   end
 end

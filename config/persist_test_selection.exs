@@ -4,7 +4,8 @@ import Config
 config :identikon,
   doctests: %{
     Identicon => [
-      # show: 5,
+      # display: 1,
+      # display: 2,
     ],
   }
 

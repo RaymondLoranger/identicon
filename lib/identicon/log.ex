@@ -3,9 +3,9 @@ defmodule Identicon.Log do
 
   require Logger
 
-  info :identicon_shown, {base_name, directory, open_with, duration, env} do
+  info :identicon_displayed, {base_name, directory, open_with, duration, env} do
     """
-    \nIdenticon in file "#{base_name}" shown successfully for #{duration} s...
+    \nIdenticon in file "#{base_name}" displayed for #{duration} s...
     • Directory: #{inspect(directory) |> maybe_break(13)}
     • Command: #{open_with}...
     #{from(env, __MODULE__)}\
@@ -14,7 +14,7 @@ defmodule Identicon.Log do
 
   def error(:cannot_write, {base_name, directory, reason, env}) do
     Logger.error("""
-    \nCannot write identicon into file "#{base_name}"...
+    \nCannot write identicon to file "#{base_name}"...
     • Directory: #{inspect(directory) |> maybe_break(13)}
     • Reason: #{"'#{:file.format_error(reason)}'" |> maybe_break(10)}
     #{from(env, __MODULE__)}\

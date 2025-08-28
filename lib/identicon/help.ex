@@ -23,8 +23,8 @@ defmodule Identicon.Help do
   ## Examples
 
       ic --help
-      ic coconut 7 --size 300 --duration 4
-      ic papaya -s 350 -d 5 --no-bell
+      ic coconut 10 --size 300 --duration 4
+      ic papaya 9 -s 350 -d 4 --bell
       ic lychee 9
   """
   @spec print_help :: :ok
@@ -33,10 +33,7 @@ defmodule Identicon.Help do
     length = Enum.join(texts) |> String.length()
     filler = String.duplicate(" ", length)
     prefix = help_format([:section, :normal], texts)
-
-    line_arguments =
-      help_format([:arg], ["<input> [<dimension>]"])
-
+    line_arguments = help_format([:arg], ["<input> [<dimension>]"])
     line_flags = help_format([:switch], ["[-b | --bell]"])
 
     line_size =
@@ -131,6 +128,7 @@ defmodule Identicon.Help do
     |> ANSI.format()
   end
 
+  @spec values_of(Range.t()) :: String.t()
   defp values_of(range) do
     Enum.to_list(range) |> inspect() |> String.slice(1..-2//1)
   end
