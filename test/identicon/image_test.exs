@@ -3,8 +3,6 @@ defmodule Identicon.ImageTest do
 
   alias Identicon.{Image, Log}
 
-  # Image has no doctests...
-  doctest Image
   doctest Image, only: TestHelper.doctests(Image)
 
   setup_all do

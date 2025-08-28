@@ -7,6 +7,9 @@ config :identikon,
       # display: 1,
       # display: 2,
     ],
+    Identicon.Image => [
+      new: 3,
+    ],
   }
 
 # Allows to run one or a few tests at a time...

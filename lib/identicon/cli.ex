@@ -27,7 +27,11 @@ defmodule Identicon.CLI do
 
   `argv` can be "-h" or "--help", which prints info on the command's usage and
   syntax. Otherwise it is an input string and optionally the identicon
-  dimension, its overall size and its display duration.
+  dimension (number of squares across and down).
+
+  To ring the bell, specify switch `--bell`.\s\s
+  To specify the identicon overall size, specify switch `--size`.\s\s
+  To specify the identicon display duration, specify switch `--duration`.
 
   ## Parameters
 
@@ -37,14 +41,20 @@ defmodule Identicon.CLI do
 
     - `-h` or `--help`     - for help
     - `-b` or `--bell`     - to ring the bell
-    - `-s` or `--size`     - identicon size in pixels
+    - `-s` or `--size`     - identicon overall size in pixels
     - `-d` or `--duration` - identicon display duration in seconds
 
   ## Examples
 
       alias Identicon.CLI
+
+      # Creates file "fig 300px 6x6.png" and opens it for 6 seconds.
       CLI.main(["fig", "6", "--size", "300", "--duration", "6", "--no-bell"])
+
+      # Creates file "guava 250px 5x5.png" and opens it for 3 seconds.
       CLI.main(["guava"])
+
+      # Creates file "apricot 350px 10x10.png" and opens it for 3 seconds.
       CLI.main(["apricot", "10", "-s", "350", "--no-help"])
   """
   @spec main(OptionParser.argv()) :: :ok
@@ -59,7 +69,7 @@ defmodule Identicon.CLI do
   Allows to run command `mix run -e 'Identicon.CLI.main()'`.
 
   The above command is equivalent to:\s\s
-  `mix run -e 'Identicon.CLI.main([""pumpkin"", ""7""])'`
+  `mix run -e 'Identicon.CLI.main([""pumpkin"", ""7"", ""--bell""])'`
 
   ## Examples
 
@@ -69,7 +79,7 @@ defmodule Identicon.CLI do
   """
   @spec main :: :ok
   def main do
-    :ok = main(["pumpkin", "7"])
+    :ok = main(["pumpkin", "7", "--bell"])
   end
 
   ## Private functions

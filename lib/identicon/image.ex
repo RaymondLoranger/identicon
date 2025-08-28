@@ -3,6 +3,7 @@ defmodule Identicon.Image do
   Creates an image struct to be converted into an identicon.
 
   The image struct contains the fields:
+
     - `input`
     - `dimension`
     - `size`
@@ -44,7 +45,7 @@ defmodule Identicon.Image do
           input: String.t(),
           # Number of squares across and down...
           dimension: pos_integer,
-          # Identicon size in pixels...
+          # Width and height of the identicon in pixels...
           size: pos_integer,
           # Number of digest bytes per chunk...
           chunk_size: pos_integer,
@@ -68,6 +69,13 @@ defmodule Identicon.Image do
 
   @doc """
   Creates an image struct from the given `input`, `dimension` and `size`.
+
+  ## Examples
+
+      iex> alias Identicon.Image
+      iex> image = Image.new("Je ne sais quoi", 5, 250)
+      iex> {image.dimension, image.size} == {5, 250} and is_struct(image, Image)
+      true
   """
   @spec new(String.t(), pos_integer, pos_integer) :: t
   def new(input, dimension, size) do

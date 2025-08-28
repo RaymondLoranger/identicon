@@ -76,17 +76,18 @@ defmodule Identicon do
     close_cmd = close_cmd()
     identicon = Image.new(input, dimension, size) |> Drawer.render()
 
-    with :ok <- File.write(file_path, identicon) do
-      info = self() |> Process.info()
-      iex? = info[:dictionary][:iex_server]
-      IO.write(if !iex? && bell?, do: "\a", else: "")
-      _open_pid = spawn_link(fn -> open(open_with, file_path) end)
-      closetask = Task.async(fn -> close(close_cmd, duration) end)
-      await_max = :timer.seconds(duration + 1)
-      _charlist = Task.await(closetask, await_max)
-      args = {base_name, @directory, open_with, duration, __ENV__}
-      :ok = Log.info(:identicon_displayed, args)
-    else
+    case File.write(file_path, identicon) do
+      :ok ->
+        info = self() |> Process.info()
+        iex? = info[:dictionary][:iex_server]
+        IO.write(if !iex? && bell?, do: "\a", else: "")
+        _open_pid = spawn_link(fn -> open(open_with, file_path) end)
+        closetask = Task.async(fn -> close(close_cmd, duration) end)
+        await_max = :timer.seconds(duration + 1)
+        _charlist = Task.await(closetask, await_max)
+        args = {base_name, @directory, open_with, duration, __ENV__}
+        :ok = Log.info(:identicon_displayed, args)
+
       {:error, reason} ->
         :ok = Log.error(:cannot_write, {base_name, @directory, reason, __ENV__})
     end
