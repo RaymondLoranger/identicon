@@ -37,17 +37,16 @@ defmodule Identicon do
 
   ## Options
 
-    * `:dimension` - number of squares across and down the identicon will have.
+    * `:dimension` - number of squares across and down in the identicon.
       Can be `5` (default), `6`, `7`, `8`, `9` or `10`.
 
-    * `:size` - width and height in pixels the identicon will have.
+    * `:size` - width and height in pixels of the identicon.
       Can be `250` (default), `300` or `350`.
 
-    * `:duration` - number of seconds the identicon will be displayed.
+    * `:duration` - number of seconds to display the identicon.
       Can be `3` (default), `4`, `5`, `6`, `7`, `8` or `9`.
 
-    * `:bell` - whether to ring the bell upon displaying the identicon.
-      Defaults to `false`.
+    * `:bell` - whether to ring the bell. Defaults to `false`.
 
   ## Examples
 
