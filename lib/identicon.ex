@@ -40,7 +40,7 @@ defmodule Identicon do
     * `:dimension` - number of squares across and down in the identicon.
       Can be `5` (default), `6`, `7`, `8`, `9` or `10`.
 
-    * `:size` - width and height in pixels of the identicon.
+    * `:size` - width and height of the identicon in pixels.
       Can be `250` (default), `300` or `350`.
 
     * `:duration` - number of seconds to display the identicon.
