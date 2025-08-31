@@ -33,6 +33,7 @@ ic --help
 #### Example 1
 
 ```
+# Creates file "kiwi 250px 7x7.png" and opens it for 3 seconds.
 ic kiwi 7
 ```
 ![alt text](<images/kiwi 250px 7x7.png>)
@@ -40,6 +41,7 @@ ic kiwi 7
 #### Example 2
 
 ```
+# Creates file "pineapple 350px 9x9.png" and opens it for 7 seconds.
 ic pineapple 9 --size 350 --duration 7 --bell
 ```
 ![alt text](<images/pineapple 350px 9x9.png>)
@@ -47,6 +49,7 @@ ic pineapple 9 --size 350 --duration 7 --bell
 #### Example 3
 
 ```
+# Creates file "orange 300px 7x7.png" and opens it for 6 seconds.
 ic orange 7 -s 300 -d 6
 ```
 ![alt text](<images/orange 300px 7x7.png>)
@@ -54,6 +57,8 @@ ic orange 7 -s 300 -d 6
 #### Example 4
 
 ```
+# Creates file "guava 250px 5x5.png" and opens it for 3 seconds.
+# Creates file "guava 250px 5x5.png" and opens it for 3 seconds.
 ic guava --no-bell --no-help
 ```
 ![alt text](<images/guava 250px 5x5.png>)
@@ -61,6 +66,7 @@ ic guava --no-bell --no-help
 #### Example 5
 
 ```
+# Prints info on the escript command's usage and syntax.
 ic --help
 ```
 ![alt text](<images/ic help.png>)
