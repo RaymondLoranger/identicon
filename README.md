@@ -58,7 +58,6 @@ ic orange 7 -s 300 -d 6
 
 ```
 # Creates file "guava 250px 5x5.png" and opens it for 3 seconds.
-# Creates file "guava 250px 5x5.png" and opens it for 3 seconds.
 ic guava --no-bell --no-help
 ```
 ![alt text](<images/guava 250px 5x5.png>)
